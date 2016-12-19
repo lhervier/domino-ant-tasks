@@ -6,7 +6,7 @@ This projet contains a set of ant tasks to work with IBM Domino servers.
 
 A ready to install version of the ant tasks is available at :
 
-<a href="https://www.dropbox.com/sh/fh3ambprjq8cfwt/AAAfD5XKZXRPvZ7ExHNDit_Da/userlessbuild-ant-tasks.jar?dl=0">Ant Tasks for Headless Designer</a>
+<a href="https://www.dropbox.com/s/k2jsqs1ack0u2sb/userlessbuild-ant-tasks-1.1.b2.jar?dl=0">Ant Tasks for Headless Designer</a>
 
 ## Compile it yourself ##
 
