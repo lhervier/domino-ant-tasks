@@ -28,6 +28,11 @@ public class DatabaseSet extends ConditionBase {
 	private BaseDatabaseSetTask parentTask;
 	
 	/**
+	 * A Server name
+	 */
+	private String server;
+	
+	/**
 	 * A template name the databases must inherit from
 	 */
 	private String template;
@@ -38,28 +43,40 @@ public class DatabaseSet extends ConditionBase {
 	private String database;
 	
 	/**
-	 * Return the databases path
-	 * @return the databases path
+	 * Return the databases
+	 * @return the databases
 	 * @throws NotesException
 	 */
-	public List<String> getPaths() throws NotesException {
-		final List<String> ret = new ArrayList<String>();
+	public List<Database> getDatabases() throws NotesException {
+		List<Database> ret = new ArrayList<Database>();
+		
+		// Server name
+		String server;
+		if( this.server == null )
+			server = this.parentTask.getServer();
+		else
+			server = this.server;
 		
 		// Extract the list of all the corresponding databases
 		if( !Utils.isEmpty(this.database) ) {
-			if( this.isSelectedDatabase(this.database) )
-				ret.add(this.database);
+			if( this.isSelectedDatabase(this.database) ) {
+				ret.add(this.parentTask.openDatabase(server, this.database));
+			}
 		
 		} else if( !Utils.isEmpty(this.template) ) {
 			DbDirectory dir = null;
 			try {
-				dir = this.parentTask.getSession().getDbDirectory(this.parentTask.getServer());
+				dir = this.parentTask.getSession().getDbDirectory(server);
 				Database db = dir.getFirstDatabase(DbDirectory.DATABASE);
 				while( db != null ) {
 					if( db.getDesignTemplateName().equals(this.template) ) {
-						if( this.isSelectedDatabase(db) )
-							ret.add(db.getFilePath());
-					} 
+						if( this.isSelectedDatabase(db) ) {
+							if( !db.isOpen() )
+								if( !db.open() )
+									throw new BuildException("Unable to open database '" + server + "!!" + db.getFilePath() + "'");
+							ret.add(db);
+						}
+					}
 					db = dir.getNextDatabase();
 				}
 			} finally {
@@ -176,5 +193,12 @@ public class DatabaseSet extends ConditionBase {
 	 */
 	public void setDatabase(String database) {
 		this.database = database;
+	}
+
+	/**
+	 * @param server the server to set
+	 */
+	public void setServer(String server) {
+		this.server = server;
 	}
 }

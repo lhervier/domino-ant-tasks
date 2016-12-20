@@ -1,7 +1,7 @@
 package fr.asi.designer.anttasks.domino.impl;
 
+import lotus.domino.Database;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -17,22 +17,22 @@ import fr.asi.designer.anttasks.domino.subtasks.SignDatabaseWithServerId;
 public class SignWithServerId extends BaseDatabaseSetTask {
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Session, java.lang.String, java.lang.String)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Database)
 	 */
 	@Override
-	public void execute(Session session, String server, String database) throws NotesException {
-		this.log("Signing database '" + server + "!!" + database + "' with the server ID");
+	public void execute(Database db) throws NotesException {
+		this.log("Signing database '" + db.getServer() + "!!" + db.getFilePath() + "' with the server ID");
 		
 		// Create the adminp request
 		SignDatabaseWithServerId signTask = this.delegate(SignDatabaseWithServerId.class);
-		signTask.setServer(server);
-		signTask.setDatabase(database);
+		signTask.setServer(db.getServer());
+		signTask.setDatabase(db.getFilePath());
 		signTask.execute();
 		String noteId = signTask.getNoteId();
 		
 		// Force adminp to run
 		SendConsole sendConsole = this.delegate(SendConsole.class);
-		sendConsole.setServer(server);
+		sendConsole.setServer(db.getServer());
 		sendConsole.setCommand("tell adminp process all");
 		sendConsole.execute();
 		
@@ -46,7 +46,7 @@ public class SignWithServerId extends BaseDatabaseSetTask {
 			tick++;
 			
 			CheckAdminRequestStatus task = this.delegate(CheckAdminRequestStatus.class);
-			task.setServer(server);
+			task.setServer(db.getServer());
 			task.setNoteId(noteId);
 			task.execute();
 			

@@ -111,27 +111,49 @@ These tasks are using the standard notes apis. They will open sessions to the Do
 
 ### DatabaseSet ###
 
-Some tasks supports a nested <databaseSet> tag which allows the task to run on multiple databases. On these tasks, you can also define the following properties :
+Some tasks supports a nested <databaseSet> tag which allows the task to run on multiple databases. On these tasks, you can define the following properties :
 
-- server: the server to find the database
 - password: Password of the local ID file to access to the server
+- server: The default server to find the different databases on.
 - database: A database to run on. This is a shortcut when processing only one database.
+
+The nested databaseSets tags allows the following properties :
+
+- database: The databaseSet will select only this database. 
+- server: The server to search the databases on. Defaults to the server defined at the task level.
 - template: The database set will correspond to all the databases that rely on the given template name.
 - You can also add a standard ant condition element. Examples below...
 
 Launch a task on a single database :
- 
+
+	<atask server="SERVER/ASI" database="mydb.nsf" password="mypassword"/>
+
+Equivalent to :
+
 	<atask server="SERVER/ASI" password="mypassword">
 		<databaseSet database="mydb.nsf"/>
 	</atask>
 
-Run on multiple databases :
+And equivalent to :
+
+	<atask password="mypassword">
+		<databaseSet server="SERVER/ASI" database="mydb.nsf"/>
+	</atask>
+
+Run on multiple databases (on the same server) :
 
 	<atask server="SERVER/ASI" password="mypassword">
 		<databaseSet database="mydb1.nsf"/>
 		<databaseSet database="mydb2.nsf"/>
 	</atask>
  
+Run on multiple databases (on different servers) :
+
+	<atask password="mypassword">
+		<databaseSet server="SERVER1/ASI" database="mydb1.nsf"/>
+		<databaseSet server="SERVER2/ASI" database="mydb2.nsf"/>
+	</atask>
+
 Run on all databases that inherits from template "tmpl" :
 
 	<atask server="SERVER/ASI" password="mypassword">

@@ -3,6 +3,7 @@ package fr.asi.designer.anttasks.domino;
 import java.util.ArrayList;
 import java.util.List;
 
+import lotus.domino.Database;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
 import fr.asi.designer.anttasks.util.Utils;
@@ -40,12 +41,10 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask {
 	
 	/**
 	 * Execution on a given database
-	 * @param session the notes session
-	 * @param server the server
-	 * @param dbPath a database path
+	 * @param database the Notes database to run the task on
 	 * @throws NotesException
 	 */
-	protected abstract void execute(Session session, String server, String dbPath) throws NotesException;
+	protected abstract void execute(Database database) throws NotesException;
 	
 	/**
 	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
@@ -53,15 +52,20 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask {
 	@Override
 	public void execute(Session session) throws NotesException {
 		// Extract databases file path
-		List<String> dbs = new ArrayList<String>();
-		if( !Utils.isEmpty(this.database) )
-			dbs.add(this.database);
-		for( DatabaseSet s : this.databases )
-			dbs.addAll(s.getPaths());
-		
-		// Run execution on each database
-		for( String db : dbs )
-			this.execute(session, this.server, db);
+		List<Database> dbs = new ArrayList<Database>();
+		try {
+			if( !Utils.isEmpty(this.database) && !Utils.isEmpty(this.server) )
+				dbs.add(this.openDatabase(this.server, this.database));
+			for( DatabaseSet s : this.databases )
+				dbs.addAll(s.getDatabases());
+			
+			// Run execution on each database
+			for( Database db : dbs )
+				this.execute(db);
+		} finally {
+			for( Database db : dbs )
+				Utils.recycleQuietly(db);
+		}
 	}
 	
 	/**

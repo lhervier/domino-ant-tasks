@@ -4,7 +4,6 @@ import lotus.domino.Database;
 import lotus.domino.Document;
 import lotus.domino.NoteCollection;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
 import fr.asi.designer.anttasks.util.Utils;
 
@@ -39,18 +38,14 @@ public class SetOnBehalfOf extends BaseDatabaseSetTask {
 	}
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Session, java.lang.String, java.lang.String)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
 	 */
 	@Override
-	public void execute(Session session, String server, String dbPath) throws NotesException {
-		this.log(server + "!!" + dbPath + "/" + this.agent + " will be set to run on behalf of '" + this.onBehalfOf + "'");
+	public void execute(Database db) throws NotesException {
+		this.log(db.getServer() + "!!" + db.getFilePath() + "/" + this.agent + " will be set to run on behalf of '" + this.onBehalfOf + "'");
 		
-		Database db = null;
 		NoteCollection coll = null;
 		try {
-			// Ouvre la base
-			db = this.openDatabase(server, dbPath);
-			
 			// Créé la collection
 			coll = db.createNoteCollection(false);
 			coll.setSelectAgents(true);
@@ -74,7 +69,6 @@ public class SetOnBehalfOf extends BaseDatabaseSetTask {
 			}
 		} finally {
 			Utils.recycleQuietly(coll);
-			Utils.recycleQuietly(db);
 		}
 	}
 }

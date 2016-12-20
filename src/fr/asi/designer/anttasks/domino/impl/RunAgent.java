@@ -7,7 +7,6 @@ import lotus.domino.Agent;
 import lotus.domino.Database;
 import lotus.domino.Document;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
@@ -43,20 +42,19 @@ public class RunAgent extends BaseDatabaseSetTask {
 	}
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Session session, String server, String dbPath)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
 	 */
 	@Override
-	public void execute(Session session, String server, String database) throws NotesException {
-		this.log("Running agent '" + this.agent + "' in database '" + server + "!!" + database + "'");
-		Database src = null;
+	public void execute(Database db) throws NotesException {
+		this.log("Running agent '" + this.agent + "' in database '" + db.getServer() + "!!" + db.getFilePath() + "'");
 		Document doc = null;
+		Agent ag = null;
 		try {
-			src = this.openDatabase(server, database);
-			Agent ag = src.getAgent(this.agent);
+			ag = db.getAgent(this.agent);
 			if( ag == null )
-				throw new BuildException("Unable to find agent '" + RunAgent.this.agent + " in database");
+				throw new BuildException("Unable to find agent '" + this.agent + " in database");
 			
-			doc = src.createDocument();
+			doc = db.createDocument();
 			doc.replaceItemValue("Form", "RunAgent");
 			for( ContextDocField field : this.contextDocFields )
 				doc.replaceItemValue(field.getName(), field.getValue());
@@ -64,9 +62,9 @@ public class RunAgent extends BaseDatabaseSetTask {
 			
 			ag.run(doc.getNoteID());
 		} finally {
+			Utils.recycleQuietly(ag);
 			doc.remove(true);
 			Utils.recycleQuietly(doc);
-			Utils.recycleQuietly(src);
 		}
 	}
 	

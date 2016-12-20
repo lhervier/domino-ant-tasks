@@ -30,7 +30,6 @@ import lotus.domino.DxlExporter;
 import lotus.domino.DxlImporter;
 import lotus.domino.NoteCollection;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 import lotus.domino.Stream;
 
 import org.apache.tools.ant.BuildException;
@@ -67,22 +66,18 @@ public class FieldImport extends BaseDatabaseSetTask {
 	private String fromFile;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Session, java.lang.String, java.lang.String)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
 	 */
 	@Override
-	protected void execute(Session session, String server, String database) throws NotesException {
-		this.log("Importing " + this.fromFile + " to " + server + "!!" + database + " documents selected with formula '" + this.formula + "'");
+	protected void execute(Database db) throws NotesException {
+		this.log("Importing " + this.fromFile + " to " + db.getServer() + "!!" + db.getFilePath() + " documents selected with formula '" + this.formula + "'");
 		
-		Database db = null;
 		NoteCollection nc = null;
 		DxlImporter importer = null;
 		DxlExporter exporter = null;
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			
-			// Get a handle on the database
-			db = this.openDatabase(server, database);
 			
 			// Load the definition of the fields to update
 			File fromFile = new File(this.getProject().getProperty("basedir") + "/" + this.fromFile);
@@ -111,7 +106,7 @@ public class FieldImport extends BaseDatabaseSetTask {
 			log("=> Will update " + nc.getCount() + " documents");
 			
 			// Export as a native DXL string
-			exporter = session.createDxlExporter();
+			exporter = db.getParent().createDxlExporter();
 			exporter.setOutputDOCTYPE(false);
 			String dxl = exporter.exportDxl(nc);
 			if( !DxlExport.EXPORT_SUCCESS.equals(exporter.getLog()) )
@@ -180,12 +175,12 @@ public class FieldImport extends BaseDatabaseSetTask {
 				out.close();
 				
 				// Create the notes stream
-				stream = session.createStream();
+				stream = db.getParent().createStream();
 				if ( !stream.open(tmp.getAbsolutePath()) || (stream.getBytes() == 0) )
 					throw new BuildException("Unable to open file " + tmp.getAbsolutePath());
 				
 				// Update documents using a DXL import
-				importer = session.createDxlImporter();
+				importer = db.getParent().createDxlImporter();
 				importer.setReplaceDbProperties(false);
 				importer.setAclImportOption(DxlImporter.DXLIMPORTOPTION_IGNORE);
 				importer.setInputValidationOption(DxlImporter.DXLVALIDATIONOPTION_VALIDATE_NEVER);
@@ -221,7 +216,6 @@ public class FieldImport extends BaseDatabaseSetTask {
 			Utils.recycleQuietly(importer);
 			Utils.recycleQuietly(exporter);
 			Utils.recycleQuietly(nc);
-			Utils.recycleQuietly(db);
 		}
 	}
 	

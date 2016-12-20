@@ -7,7 +7,8 @@ import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
- * Ant task to remove a database
+ * Ant task to remove a database.
+ * FIXME: Implement support for DatabaseSets
  * @author Lionel HERVIER
  */
 public class DatabaseDelete extends BaseNotesTask {

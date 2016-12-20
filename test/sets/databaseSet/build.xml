@@ -6,11 +6,10 @@
 	<target name="test">
 		<dxlImport
 				password="" 
-				server="HLINK/HERMES" 
 				fromFile="depannage.xml">
-			<databaseSet template="testDatabaseSet">
+			<databaseSet server="HLINK/HERMES" template="testDatabaseSet">
 				<not>
-					<documentExists formula="Form = 'Param'"/>
+					<documentExists formula="Form = 'Depannage'"/>
 				</not>
 			</databaseSet>
 		</dxlImport>

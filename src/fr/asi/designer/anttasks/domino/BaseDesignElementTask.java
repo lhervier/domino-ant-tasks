@@ -4,7 +4,6 @@ import lotus.domino.Database;
 import lotus.domino.Document;
 import lotus.domino.NoteCollection;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
@@ -67,14 +66,12 @@ public abstract class BaseDesignElementTask extends BaseDatabaseSetTask {
 	protected abstract void execute(Type type, Document designElement) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Session, java.lang.String, java.lang.String)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
 	 */
 	@Override
-	protected void execute(Session session, String server, String database) throws NotesException {
-		Database db = null;
+	protected void execute(Database db) throws NotesException {
 		NoteCollection nc = null;
 		try {
-			db = this.openDatabase(server, database);
 			nc = db.createNoteCollection(false);
 			
 			String[] selects = this.select.split(",");
@@ -186,7 +183,6 @@ public abstract class BaseDesignElementTask extends BaseDatabaseSetTask {
 			}
 		} finally {
 			Utils.recycleQuietly(nc);
-			Utils.recycleQuietly(db);
 		}
 	}
 	

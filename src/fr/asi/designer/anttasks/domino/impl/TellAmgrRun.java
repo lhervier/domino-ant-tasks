@@ -1,7 +1,7 @@
 package fr.asi.designer.anttasks.domino.impl;
 
+import lotus.domino.Database;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
 
 /**
@@ -16,13 +16,13 @@ public class TellAmgrRun extends BaseDatabaseSetTask {
 	private String agent;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Session, java.lang.String, java.lang.String)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Database)
 	 */
 	@Override
-	protected void execute(Session session, String server, String dbPath) throws NotesException {
+	protected void execute(Database db) throws NotesException {
 		SendConsole task = this.delegate(SendConsole.class);
-		task.setServer(server);
-		task.setCommand("tell amgr run \"" + dbPath + "\" '" + this.agent + "'");
+		task.setServer(db.getServer());
+		task.setCommand("tell amgr run \"" + db.getFilePath() + "\" '" + this.agent + "'");
 		task.execute();
 	}
 	

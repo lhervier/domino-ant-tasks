@@ -3,7 +3,6 @@ package fr.asi.designer.anttasks.domino.impl;
 import lotus.domino.Database;
 import lotus.domino.DocumentCollection;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
 import fr.asi.designer.anttasks.util.Utils;
 
@@ -18,16 +17,17 @@ public class ClearDb extends BaseDatabaseSetTask {
 	 */
 	private String formula;
 	
+	/**
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Database)
+	 */
 	@Override
-	public void execute(Session session, String server, String database) throws NotesException {
+	public void execute(Database db) throws NotesException {
 		if( this.formula == null )
-			this.log("Clearing all content in database '" + server + "!!" + database + "'");
+			this.log("Clearing all content in database '" + db.getServer() + "!!" + db.getFilePath() + "'");
 		else
-			this.log("Clearing '" + this.formula + "' in database '" + server + "!!" + database + "'");
-		Database db = null;
+			this.log("Clearing '" + this.formula + "' in database '" + db.getServer() + "!!" + db.getFilePath() + "'");
 		DocumentCollection coll = null;
 		try {
-			db = this.openDatabase(server, database);
 			if( Utils.isEmpty(this.formula) )
 				coll = db.getAllDocuments();
 			else
@@ -35,7 +35,6 @@ public class ClearDb extends BaseDatabaseSetTask {
 			coll.removeAll(false);
 		} finally {
 			Utils.recycleQuietly(coll);
-			Utils.recycleQuietly(db);
 		}
 	}
 	

@@ -3,7 +3,6 @@ package fr.asi.designer.anttasks.domino.impl;
 import lotus.domino.Agent;
 import lotus.domino.Database;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
@@ -41,23 +40,22 @@ public class EnableAgent extends BaseDatabaseSetTask {
 	}
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Session, String, String)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
 	 */
 	@Override
-	public void execute(Session session, String server, String dbPath) throws NotesException {
-		this.log("Enabling agent '" + this.agent + "' in database '" + server + "!!" + dbPath + "'");
-		Database src = null;
+	public void execute(Database db) throws NotesException {
+		this.log("Enabling agent '" + this.agent + "' in database '" + db.getServer() + "!!" + db.getFilePath() + "'");
+		Agent ag = null;
 		try {
-			src = this.openDatabase(server, dbPath);
-			Agent ag = src.getAgent(EnableAgent.this.agent);
+			ag = db.getAgent(this.agent);
 			if( ag == null )
-				throw new BuildException("Agent '" + EnableAgent.this.agent + "' not found in database '" + server + "!!" + dbPath + "'");
+				throw new BuildException("Agent '" + EnableAgent.this.agent + "' not found in database '" + db.getServer() + "!!" + db.getFilePath() + "'");
 
 			ag.setEnabled(true);
-			ag.setServerName(EnableAgent.this.serverToRun);
+			ag.setServerName(this.serverToRun);
 			ag.save();
 		} finally {
-			Utils.recycleQuietly(src);
+			Utils.recycleQuietly(ag);
 		}
 	}
 }

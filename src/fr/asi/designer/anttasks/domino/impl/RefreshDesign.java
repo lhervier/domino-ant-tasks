@@ -1,12 +1,11 @@
 package fr.asi.designer.anttasks.domino.impl;
 
+import lotus.domino.Database;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
 
 import org.apache.tools.ant.Project;
 
 import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
-import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * Ant task to launch a refresh design of a set of databases.
@@ -30,24 +29,20 @@ public class RefreshDesign extends BaseDatabaseSetTask {
 	}
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Session, java.lang.String, java.lang.String)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Database)
 	 */
 	@Override
-	public void execute(Session session, String server, String dbPath) throws NotesException {
-		String cmd = "load design";
-		if( !Utils.isEmpty(dbPath) ) { 
-			this.log("Refreshing design of '" + server + "!!" + dbPath + "'", Project.MSG_INFO);
-			cmd += " -f " + dbPath;
-		} else
-			this.log("Refreshing design of all databases on server '" + server + "'", Project.MSG_INFO);
+	public void execute(Database db) throws NotesException {
+		this.log("Refreshing design of '" + db.getServer() + "!!" + db.getFilePath() + "'", Project.MSG_INFO);
+		String cmd = "load design -f " + db.getFilePath();
 		
 		if( this.dryRun )
 			return;
 		
 		SendConsole task = this.delegate(SendConsole.class);
-		task.setServer(server);
+		task.setServer(db.getServer());
 		task.setCommand(cmd);
 		task.setTaskRunningMessage("Designer");
-		task.execute(session);
+		task.execute(db.getParent());
 	}
 }
