@@ -6,10 +6,10 @@
 	<target name="test">
 		<runAgent
 				password="" 
-				server="HLINK/HERMES" 	
-				database="testRunAgent.nsf"
+				server="HLINK/HERMES"
 				agent="testAgent">
 			<contextDocField name="Champ1" value="Valeur"/>
+			<databaseSet database="testRunAgent.nsf"/>
 		</runAgent>
 	</target>
 </project>

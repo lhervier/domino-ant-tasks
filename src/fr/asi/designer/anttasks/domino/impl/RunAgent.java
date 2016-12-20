@@ -11,7 +11,7 @@ import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
 import fr.asi.designer.anttasks.domino.ContextDocField;
 import fr.asi.designer.anttasks.util.Utils;
 
@@ -21,18 +21,8 @@ import fr.asi.designer.anttasks.util.Utils;
  * document context.
  * @author Lionel HERVIER
  */
-public class RunAgent extends BaseNotesTask {
+public class RunAgent extends BaseDatabaseSetTask {
 
-	/**
-	 * Server
-	 */
-	private String server;
-	
-	/**
-	 * Database
-	 */
-	private String database;
-	
 	/**
 	 * Agent
 	 */
@@ -53,15 +43,15 @@ public class RunAgent extends BaseNotesTask {
 	}
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Session session, String server, String dbPath)
 	 */
 	@Override
-	public void execute(Session session) throws NotesException {
-		this.log("Running agent '" + this.agent + "' in database '" + this.server + "!!" + this.database + "'");
+	public void execute(Session session, String server, String database) throws NotesException {
+		this.log("Running agent '" + this.agent + "' in database '" + server + "!!" + database + "'");
 		Database src = null;
 		Document doc = null;
 		try {
-			src = this.openDatabase(this.server, this.database);
+			src = this.openDatabase(server, database);
 			Agent ag = src.getAgent(this.agent);
 			if( ag == null )
 				throw new BuildException("Unable to find agent '" + RunAgent.this.agent + " in database");
@@ -82,20 +72,6 @@ public class RunAgent extends BaseNotesTask {
 	
 	// ===================================================================
 	
-	/**
-	 * @param server the server to set
-	 */
-	public void setServer(String server) {
-		this.server = server;
-	}
-
-	/**
-	 * @param database the database to set
-	 */
-	public void setDatabase(String database) {
-		this.database = database;
-	}
-
 	/**
 	 * @param agent the agent to set
 	 */

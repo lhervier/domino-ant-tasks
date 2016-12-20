@@ -243,6 +243,14 @@ This task will run an agent. It will make it run on a context document, on which
 		<contextDocField name="MyField2" value="my other value"/>
 	</runAgent>
 
+This task can also work on a databaseSet :
+
+	<runAgent server="SERVER/ASI" agent="myagent" password="mypassword">
+		<contextDocField name="MyField" value="my value"/>
+		<contextDocField name="MyField2" value="my other value"/>
+		<databaseSet template="mytemplate"/>
+	</runAgent>
+
 ### tellAmgrRun ###
 
 This task will run a scheduled agent using a "tell amgr run" console command. It will NOT wait for the agent to finish.
