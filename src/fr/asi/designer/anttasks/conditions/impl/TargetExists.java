@@ -44,7 +44,6 @@ public class TargetExists implements Condition {
 	/**
 	 * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
 	 */
-	@Override
 	public boolean eval() throws BuildException {
 		InputStream in = null;
 		try {

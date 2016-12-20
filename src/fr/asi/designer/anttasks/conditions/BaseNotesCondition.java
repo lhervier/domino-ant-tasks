@@ -37,7 +37,6 @@ public abstract class BaseNotesCondition implements Condition {
 	/**
 	 * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
 	 */
-	@Override
 	public boolean eval() throws BuildException {
 		final ObjectHolder<Throwable> exHolder = new ObjectHolder<Throwable>();
 		final ObjectHolder<Boolean> resultHolder = new ObjectHolder<Boolean>();
