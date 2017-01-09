@@ -28,6 +28,11 @@ public class RunAgent extends BaseDatabaseSetTask {
 	private String agent;
 	
 	/**
+	 * Run on server ?
+	 */
+	private boolean runOnServer = false;
+	
+	/**
 	 * The fields to add
 	 */
 	private List<ContextDocField> contextDocFields = new ArrayList<ContextDocField>();
@@ -60,7 +65,10 @@ public class RunAgent extends BaseDatabaseSetTask {
 				doc.replaceItemValue(field.getName(), field.getValue());
 			doc.save(true, false);
 			
-			ag.run(doc.getNoteID());
+			if( this.runOnServer)
+				ag.runOnServer(doc.getNoteID());
+			else
+				ag.run(doc.getNoteID());
 		} finally {
 			Utils.recycleQuietly(ag);
 			doc.remove(true);
@@ -75,6 +83,13 @@ public class RunAgent extends BaseDatabaseSetTask {
 	 */
 	public void setAgent(String agent) {
 		this.agent = agent;
+	}
+
+	/**
+	 * @param runOnServer the runOnServer to set
+	 */
+	public void setRunOnServer(boolean runOnServer) {
+		this.runOnServer = runOnServer;
 	}
 	
 }
