@@ -5,7 +5,7 @@
     <property name="classes.dir" value="bin"/>
 	<property name="resources.dir" value="resources"/>
 	<property name="build.dir" value="build"/>
-	<property name="version" value="1.1.b2"/>
+	<property name="version" value="1.1.b3"/>
 	
     <target name="clean" description="Delete all generated files">
         <delete dir="${classes.dir}"/>
