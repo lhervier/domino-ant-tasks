@@ -8,6 +8,8 @@ import lotus.domino.Session;
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 /**
  * Check the status of a given adminp request
  * @author Lionel HERVIER
@@ -39,7 +41,7 @@ public class CheckAdminRequestStatus extends BaseNotesTask {
 		DocumentCollection responses = null;
 		Document response = null;
 		try {
-			admin4 = this.openDatabase(this.server, "admin4.nsf");
+			admin4 = openDatabase(this.getSession(), this.server, "admin4.nsf");
 			request = admin4.getDocumentByID(this.noteId);
 			
 			responses = request.getResponses();

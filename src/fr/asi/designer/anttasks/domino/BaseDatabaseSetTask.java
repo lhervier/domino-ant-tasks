@@ -1,11 +1,14 @@
 package fr.asi.designer.anttasks.domino;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import lotus.domino.Database;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
+import fr.asi.designer.anttasks.DatabaseSet;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -34,7 +37,7 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask {
 	 */
 	public DatabaseSet createDatabaseSet() {
 		DatabaseSet ret = new DatabaseSet();
-		ret.setParentTask(this);
+		ret.setParentDatabaseSetElement(this);
 		this.databases.add(ret);
 		return ret;
 	}
@@ -55,7 +58,7 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask {
 		List<Database> dbs = new ArrayList<Database>();
 		try {
 			if( !Utils.isEmpty(this.database) && !Utils.isEmpty(this.server) )
-				dbs.add(this.openDatabase(this.server, this.database));
+				dbs.add(openDatabase(this.getSession(), this.server, this.database));
 			for( DatabaseSet s : this.databases )
 				dbs.addAll(s.getDatabases());
 			
@@ -86,14 +89,14 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask {
 		return (T) ret2;
 	}
 
+	// ==============================================================
+	
 	/**
 	 * @return the server
 	 */
-	String getServer() {
+	public String getServer() {
 		return server;
 	}
-	
-	// ==============================================================
 	
 	/**
 	 * @param server the server to set

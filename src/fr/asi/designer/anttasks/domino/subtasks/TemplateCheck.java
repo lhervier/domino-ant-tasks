@@ -11,6 +11,8 @@ import org.apache.tools.ant.BuildException;
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 /**
  * Check if the given database is a template.
  * @author Lionel HERVIER
@@ -37,7 +39,7 @@ public class TemplateCheck extends BaseNotesTask {
 		Database src = null;
 		NoteCollection nc = null;
 		try {
-			src = this.openDatabase(this.server, this.database);
+			src = openDatabase(this.getSession(), this.server, this.database);
 			
 			nc = src.createNoteCollection(false);
 			nc.setSelectIcon(true);

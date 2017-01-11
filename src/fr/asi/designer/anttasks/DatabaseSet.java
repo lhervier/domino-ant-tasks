@@ -1,4 +1,6 @@
-package fr.asi.designer.anttasks.domino;
+package fr.asi.designer.anttasks;
+
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
 
 import fr.asi.designer.anttasks.conditions.BaseServerDatabaseCondition;
+import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -25,7 +28,7 @@ public class DatabaseSet extends ConditionBase {
 	/**
 	 * the parent task
 	 */
-	private BaseDatabaseSetTask parentTask;
+	private BaseDatabaseSetTask parentDatabaseSetElement;
 	
 	/**
 	 * A Server name
@@ -53,20 +56,20 @@ public class DatabaseSet extends ConditionBase {
 		// Server name
 		String server;
 		if( this.server == null )
-			server = this.parentTask.getServer();
+			server = this.parentDatabaseSetElement.getServer();
 		else
 			server = this.server;
 		
 		// Extract the list of all the corresponding databases
 		if( !Utils.isEmpty(this.database) ) {
 			if( this.isSelectedDatabase(this.database) ) {
-				ret.add(this.parentTask.openDatabase(server, this.database));
+				ret.add(openDatabase(this.parentDatabaseSetElement.getSession(), server, this.database));
 			}
 		
 		} else if( !Utils.isEmpty(this.template) ) {
 			DbDirectory dir = null;
 			try {
-				dir = this.parentTask.getSession().getDbDirectory(server);
+				dir = this.parentDatabaseSetElement.getSession().getDbDirectory(server);
 				Database db = dir.getFirstDatabase(DbDirectory.DATABASE);
 				while( db != null ) {
 					if( db.getDesignTemplateName().equals(this.template) ) {
@@ -97,7 +100,7 @@ public class DatabaseSet extends ConditionBase {
 	private boolean isSelectedDatabase(String database) throws NotesException {
 		Database db = null;
 		try {
-			db = this.parentTask.openDatabase(this.parentTask.getServer(), database);
+			db = openDatabase(this.parentDatabaseSetElement.getSession(), this.parentDatabaseSetElement.getServer(), database);
 			return this.isSelectedDatabase(db);
 		} finally {
 			Utils.recycleQuietly(db);
@@ -137,7 +140,7 @@ public class DatabaseSet extends ConditionBase {
 			BaseServerDatabaseCondition c = (BaseServerDatabaseCondition) condition;
 			c.setServer(db.getServer());
 			c.setDatabase(db.getFilePath());
-			c.setPassword(this.parentTask.getPassword());
+			c.setPassword(this.parentDatabaseSetElement.getPassword());
 		}
 		
 		if( condition instanceof ConditionBase ) {
@@ -169,7 +172,7 @@ public class DatabaseSet extends ConditionBase {
 	 * Returns the associated server
 	 */
 	public String getServer() {
-		return this.parentTask.getServer();
+		return this.parentDatabaseSetElement.getServer();
 	}
 	
 	// ===============================================================================================
@@ -177,8 +180,8 @@ public class DatabaseSet extends ConditionBase {
 	/**
 	 * @param parentTask the parentTask to set
 	 */
-	void setParentTask(BaseDatabaseSetTask parentTask) {
-		this.parentTask = parentTask;
+	public void setParentDatabaseSetElement(BaseDatabaseSetTask parentTask) {
+		this.parentDatabaseSetElement = parentTask;
 	}
 
 	/**

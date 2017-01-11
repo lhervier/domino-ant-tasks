@@ -36,6 +36,8 @@ import org.xml.sax.SAXException;
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 /**
  * Export a set of fields from a given document
  * into a dxl fiel
@@ -100,7 +102,7 @@ public class FieldExport extends BaseNotesTask {
 			stream.truncate();
 			
 			// Build the document collection
-			db = this.openDatabase(this.server, this.database);
+			db = openDatabase(this.getSession(), this.server, this.database);
 			nc = db.createNoteCollection(false);
 			nc.setSelectDocuments(true);
 			nc.setSelectionFormula(this.formula);

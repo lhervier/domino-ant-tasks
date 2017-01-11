@@ -19,7 +19,7 @@ public abstract class BaseServerDatabaseCondition extends BaseNotesCondition {
 	/**
 	 * @return the server
 	 */
-	protected String getServer() {
+	public String getServer() {
 		return server;
 	}
 

@@ -31,6 +31,8 @@ import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.DOMUtils;
 import fr.asi.designer.anttasks.util.Utils;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 /**
  * Export a set of documents into a DXL file
  * @author Lionel HERVIER
@@ -84,7 +86,7 @@ public class DxlExport extends BaseNotesTask {
 			stream.truncate();
 			
 			// Build the document collection
-			db = this.openDatabase(this.server, this.database);
+			db = openDatabase(this.getSession(), this.server, this.database);
 			nc = db.createNoteCollection(false);
 			nc.setSelectDocuments(true);
 			nc.setSelectionFormula(this.formula);

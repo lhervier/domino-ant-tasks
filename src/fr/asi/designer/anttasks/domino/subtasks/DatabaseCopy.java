@@ -8,6 +8,8 @@ import lotus.domino.Session;
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 /**
  * Task to copy a database. Will only use the existing API to copy
  * a source to a destination so :
@@ -49,7 +51,8 @@ public class DatabaseCopy extends BaseNotesTask {
 		Database src = null;
 		Database dest = null;
 		try {
-			src = this.openDatabase(
+			src = openDatabase(
+					this.getSession(),
 					this.srcServer, 
 					this.srcDatabase
 			);

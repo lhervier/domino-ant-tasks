@@ -8,6 +8,8 @@ import lotus.domino.Session;
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 /**
  * Copy all documents from a source database to a destination
  * @author Lionel HERVIER
@@ -45,8 +47,8 @@ public class CopyAllDocuments extends BaseNotesTask {
 		Database dest = null;
 		DocumentCollection coll = null;
 		try {
-			src = this.openDatabase(srcServer, srcDatabase);
-			dest = this.openDatabase(destServer, destDatabase);
+			src = openDatabase(this.getSession(), srcServer, srcDatabase);
+			dest = openDatabase(this.getSession(), destServer, destDatabase);
 			
 			coll = src.getAllDocuments();
 			Document doc = coll.getFirstDocument();
