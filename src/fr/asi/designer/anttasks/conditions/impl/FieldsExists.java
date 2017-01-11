@@ -1,21 +1,23 @@
 package fr.asi.designer.anttasks.conditions.impl;
 
-import org.apache.tools.ant.BuildException;
+import java.util.List;
 
 import lotus.domino.Database;
 import lotus.domino.Document;
 import lotus.domino.DocumentCollection;
 import lotus.domino.Item;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
-import fr.asi.designer.anttasks.conditions.BaseServerDatabaseCondition;
+
+import org.apache.tools.ant.BuildException;
+
+import fr.asi.designer.anttasks.conditions.BaseDatabaseSetCondition;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * A condition to check if a given document contains a given field
  * @author Lionel HERVIER
  */
-public class FieldsExists extends BaseServerDatabaseCondition {
+public class FieldsExists extends BaseDatabaseSetCondition {
 
 	/**
 	 * The formula. Must select only one document.
@@ -28,37 +30,36 @@ public class FieldsExists extends BaseServerDatabaseCondition {
 	private String fields;
 
 	/**
-	 * @see fr.asi.designer.anttasks.conditions.BaseNotesCondition#eval(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.conditions.BaseDatabaseSetCondition#eval(Database)
 	 */
 	@Override
-	protected boolean eval(Session session) throws NotesException {
-		Database db = null;
-		DocumentCollection coll = null;
-		Document doc = null;
-		try {
-			db = this.openDatabase(this.getServer(), this.getDatabase());
-			coll = db.search(this.formula);
-			if( coll.getCount() != 1 )
-				throw new BuildException("The formula must select only one document");
-			
-			String[] tblFields = this.fields.split(",");
-			for( int i=0; i<tblFields.length; i++ )
-				tblFields[i] = tblFields[i].trim();
-			
-			doc = coll.getFirstDocument();
-			for( String f : tblFields ) {
-				if( !doc.hasItem(f) )
-					return false;
-				Item it = doc.getFirstItem(f);
-				if( it.getType() == Item.TEXT && Utils.isEmpty(it.getValueString()) )
-					return false;
+	protected boolean eval(List<Database> databases) throws NotesException {
+		for( Database db : databases ) {
+			DocumentCollection coll = null;
+			Document doc = null;
+			try {
+				coll = db.search(this.formula);
+				if( coll.getCount() != 1 )
+					throw new BuildException("The formula must select only one document");
+				
+				String[] tblFields = this.fields.split(",");
+				for( int i=0; i<tblFields.length; i++ )
+					tblFields[i] = tblFields[i].trim();
+				
+				doc = coll.getFirstDocument();
+				for( String f : tblFields ) {
+					if( !doc.hasItem(f) )
+						return false;
+					Item it = doc.getFirstItem(f);
+					if( it.getType() == Item.TEXT && Utils.isEmpty(it.getValueString()) )
+						return false;
+				}
+			} finally {
+				Utils.recycleQuietly(doc);
+				Utils.recycleQuietly(coll);
 			}
-			return true;
-		} finally {
-			Utils.recycleQuietly(doc);
-			Utils.recycleQuietly(coll);
-			Utils.recycleQuietly(db);
 		}
+		return true;
 	}
 	
 	// =============================================================================

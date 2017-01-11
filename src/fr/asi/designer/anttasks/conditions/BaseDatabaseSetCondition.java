@@ -1,4 +1,4 @@
-package fr.asi.designer.anttasks.domino;
+package fr.asi.designer.anttasks.conditions;
 
 import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
 
@@ -13,11 +13,11 @@ import fr.asi.designer.anttasks.DatabaseSetElement;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
- * Base task for tasks that work with databaseSets
+ * Base Notes condition that rely on a server and a database
  * @author Lionel HERVIER
  */
-public abstract class BaseDatabaseSetTask extends BaseNotesTask implements DatabaseSetElement {
-	
+public abstract class BaseDatabaseSetCondition extends BaseNotesCondition implements DatabaseSetElement {
+
 	/**
 	 * The server
 	 */
@@ -27,7 +27,7 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask implements Datab
 	 * The database
 	 */
 	private String database;
-	
+
 	/**
 	 * The database set
 	 */
@@ -44,17 +44,25 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask implements Datab
 	}
 	
 	/**
-	 * Execution on a given database
-	 * @param database the Notes database to run the task on
-	 * @throws NotesException
+	 * Clear the database set
 	 */
-	protected abstract void execute(Database database) throws NotesException;
+	public void clearDatabaseSet() {
+		this.databases.clear();
+	}
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * Evaluate the condition on the database
+	 * @param databases the databases
+	 * @return the condition result
+	 * @throws NotesException en cas de pb
+	 */
+	protected abstract boolean eval(List<Database> databases) throws NotesException;
+	
+	/**
+	 * @see fr.asi.designer.anttasks.conditions.BaseNotesCondition#eval(lotus.domino.Session)
 	 */
 	@Override
-	public void execute(Session session) throws NotesException {
+	protected boolean eval(Session session) throws NotesException {
 		// Extract databases file path
 		List<Database> dbs = new ArrayList<Database>();
 		try {
@@ -64,40 +72,28 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask implements Datab
 				dbs.addAll(s.getDatabases());
 			
 			// Run execution on each database
-			for( Database db : dbs )
-				this.execute(db);
+			return this.eval(dbs);
 		} finally {
 			for( Database db : dbs )
 				Utils.recycleQuietly(db);
 		}
 	}
-	
-	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#delegate(java.lang.Class)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends BaseNotesTask> T delegate(Class<T> cl) {
-		T ret = super.delegate(cl);
-		if( !(ret instanceof BaseDatabaseSetTask) )
-			return ret;
-		
-		BaseDatabaseSetTask ret2 = (BaseDatabaseSetTask) ret;
-		ret2.database = this.database;
-		ret2.server = this.server;
-		ret2.databases = this.databases;
-		
-		return (T) ret2;
-	}
 
-	// ==============================================================
-	
 	/**
 	 * @return the server
 	 */
 	public String getServer() {
 		return server;
 	}
+
+	/**
+	 * @return the database
+	 */
+	protected String getDatabase() {
+		return database;
+	}
+
+	// =======================================================================
 	
 	/**
 	 * @param server the server to set

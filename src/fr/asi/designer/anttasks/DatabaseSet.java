@@ -15,8 +15,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 import org.apache.tools.ant.taskdefs.condition.ConditionBase;
 
-import fr.asi.designer.anttasks.conditions.BaseServerDatabaseCondition;
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.conditions.BaseDatabaseSetCondition;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -28,7 +27,7 @@ public class DatabaseSet extends ConditionBase {
 	/**
 	 * the parent task
 	 */
-	private BaseDatabaseSetTask parentDatabaseSetElement;
+	private DatabaseSetElement parentDatabaseSetElement;
 	
 	/**
 	 * A Server name
@@ -136,8 +135,11 @@ public class DatabaseSet extends ConditionBase {
 	 * @throws NotesException
 	 */
 	private void associate(Condition condition, Database db) throws NotesException {
-		if( condition instanceof BaseServerDatabaseCondition ) {
-			BaseServerDatabaseCondition c = (BaseServerDatabaseCondition) condition;
+		if( condition instanceof BaseDatabaseSetCondition ) {
+			// Force the condition to run on the current database only.
+			// If a condition uses a databaseSet when used itself inside a databaseSet, it will be ignored.
+			BaseDatabaseSetCondition c = (BaseDatabaseSetCondition) condition;
+			c.clearDatabaseSet();
 			c.setServer(db.getServer());
 			c.setDatabase(db.getFilePath());
 			c.setPassword(this.parentDatabaseSetElement.getPassword());
@@ -168,20 +170,13 @@ public class DatabaseSet extends ConditionBase {
 		}
 	}
 	
-	/**
-	 * Returns the associated server
-	 */
-	public String getServer() {
-		return this.parentDatabaseSetElement.getServer();
-	}
-	
 	// ===============================================================================================
 	
 	/**
-	 * @param parentTask the parentTask to set
+	 * @param parentElement the parentElement to set
 	 */
-	public void setParentDatabaseSetElement(BaseDatabaseSetTask parentTask) {
-		this.parentDatabaseSetElement = parentTask;
+	public void setParentDatabaseSetElement(DatabaseSetElement parentElement) {
+		this.parentDatabaseSetElement = parentElement;
 	}
 
 	/**
