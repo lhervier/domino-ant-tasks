@@ -80,7 +80,9 @@ public class FieldImport extends BaseDatabaseSetTask {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			
 			// Load the definition of the fields to update
-			File fromFile = new File(this.getProject().getProperty("basedir") + "/" + this.fromFile);
+			File fromFile = new File(this.fromFile);
+			if( !fromFile.isAbsolute() )
+				fromFile = new File(this.getProject().getProperty("basedir") + "/" + this.fromFile);
 			Document fieldDoc = dBuilder.parse(fromFile);
 			Element fieldRoot = fieldDoc.getDocumentElement();
 			

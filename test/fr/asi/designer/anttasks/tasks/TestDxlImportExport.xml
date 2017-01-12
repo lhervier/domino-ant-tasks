@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="test-dxlExport" basedir="." default="test">
+	<taskdef resource="userlessbuild.antlib.xml"/>
+	<target name="test">
+		<dxlExport 
+				password="${password}"
+				server="${server}" 
+				database="${srcDb}" 
+				formula="Form = 'DxlExport'"
+				toFile="${file}"/>
+		<dxlImport
+				password="${password}"
+				server="${server}" 
+				database="${destDb}" 
+				fromFile="${file}"/>
+	</target>
+</project>

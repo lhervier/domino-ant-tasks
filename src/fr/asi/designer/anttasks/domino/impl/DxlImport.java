@@ -40,7 +40,9 @@ public class DxlImport extends BaseDatabaseSetTask {
 		Stream stream = null;
 		DxlImporter importer = null;
 		try {
-			File f = new File(this.getProject().getProperty("basedir") + "/" + this.fromFile);
+			File f = new File(this.fromFile);
+			if( !f.isAbsolute() )
+				f = new File(this.getProject().getProperty("basedir") + "/" + this.fromFile);
 			stream = db.getParent().createStream();
 			if ( !stream.open(f.getAbsolutePath()) || (stream.getBytes() == 0) )
 				throw new BuildException("Unable to open file " + f.getAbsolutePath());

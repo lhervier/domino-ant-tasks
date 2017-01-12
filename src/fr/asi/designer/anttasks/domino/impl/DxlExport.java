@@ -1,10 +1,14 @@
 package fr.asi.designer.anttasks.domino.impl;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
@@ -18,7 +22,6 @@ import lotus.domino.DxlExporter;
 import lotus.domino.NoteCollection;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import lotus.domino.Stream;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.xml.serialize.OutputFormat;
@@ -30,8 +33,6 @@ import org.xml.sax.SAXException;
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.DOMUtils;
 import fr.asi.designer.anttasks.util.Utils;
-
-import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
 
 /**
  * Export a set of documents into a DXL file
@@ -73,18 +74,15 @@ public class DxlExport extends BaseNotesTask {
 	protected void execute(Session session) throws NotesException {
 		this.log("Exporting " + this.formula + " from " + this.server + "!!" + this.database + " to " + this.toFile);
 		Database db = null;
-		Stream stream = null;
 		NoteCollection nc = null;
 		DxlExporter exporter = null;
+		
+		File f = new File(this.toFile);
+		if( !f.isAbsolute() )
+			f = new File(this.getProject().getProperty("basedir") + "/" + this.toFile);
+		OutputStream out = null;
+		Writer writer = null;
 		try {
-			// Prepare the stream
-			stream = session.createStream();
-			File f = new File(this.getProject().getProperty("basedir") + "/" + this.toFile);
-			Utils.createFolder(f.getParentFile());		// Ensure folder exists
-			if( !stream.open(f.getAbsolutePath()) )
-				throw new BuildException("Unable to open file " + toFile + " for writing");
-			stream.truncate();
-			
 			// Build the document collection
 			db = openDatabase(this.getSession(), this.server, this.database);
 			nc = db.createNoteCollection(false);
@@ -114,13 +112,17 @@ public class DxlExport extends BaseNotesTask {
             format.setLineWidth(65);
             format.setIndenting(true);
             format.setIndent(2);
-            Writer out = new StringWriter();
-            XMLSerializer serializer = new XMLSerializer(out, format);
-            serializer.serialize(document);
-
-            String output = out.toString();
             
-			stream.writeText(output);
+            // Prepare the stream
+            Utils.createFolder(f.getParentFile());		// Ensure folder exists
+    		if( f.exists() )
+    			if( !f.delete() )
+    				throw new BuildException("Unable to replace file " + f.getAbsolutePath());
+    		f.createNewFile();
+    		out = new FileOutputStream(f);
+			writer = new OutputStreamWriter(out, "UTF-8");
+            XMLSerializer serializer = new XMLSerializer(writer, format);
+            serializer.serialize(document);
 		} catch (ParserConfigurationException e) {
 			throw new BuildException(e);
 		} catch (UnsupportedEncodingException e) {
@@ -132,10 +134,11 @@ public class DxlExport extends BaseNotesTask {
 		} catch (TransformerFactoryConfigurationError e) {
 			throw new BuildException(e);
 		} finally {
+			Utils.closeQuietly(writer);
+			Utils.closeQuietly(out);
+			
 			Utils.recycleQuietly(exporter);
 			Utils.recycleQuietly(nc);
-			Utils.closeQuietly(stream);
-			Utils.recycleQuietly(stream);
 			Utils.recycleQuietly(db);
 		}
 	}

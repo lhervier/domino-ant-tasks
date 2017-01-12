@@ -1,10 +1,14 @@
 package fr.asi.designer.anttasks.domino.impl;
 
+import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -21,7 +25,6 @@ import lotus.domino.DxlExporter;
 import lotus.domino.NoteCollection;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import lotus.domino.Stream;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.xml.serialize.OutputFormat;
@@ -35,8 +38,6 @@ import org.xml.sax.SAXException;
 
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
-
-import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
 
 /**
  * Export a set of fields from a given document
@@ -88,19 +89,16 @@ public class FieldExport extends BaseNotesTask {
 				" from database " + this.server + "!!" + this.database + 
 				" to file " + this.toFile);
 		Database db = null;
-		Stream stream = null;
 		NoteCollection nc = null;
 		DxlExporter exporter = null;
 		Document doc = null;
+		
+		File f = new File(this.toFile);
+		if( !f.isAbsolute() )
+			f = new File(this.getProject().getProperty("basedir") + "/" + this.toFile);
+		OutputStream out = null;
+		Writer writer = null;
 		try {
-			// Open the stream
-			stream = session.createStream();
-			File f = new File(this.getProject().getProperty("basedir") + "/" + this.toFile);
-			Utils.createFolder(f.getParentFile());		// Ensure parent folder exists
-			if( !stream.open(f.getAbsolutePath()) )
-				throw new BuildException("Unable to open file " + toFile + " for writing");
-			stream.truncate();
-			
 			// Build the document collection
 			db = openDatabase(this.getSession(), this.server, this.database);
 			nc = db.createNoteCollection(false);
@@ -139,13 +137,16 @@ public class FieldExport extends BaseNotesTask {
             format.setLineWidth(65);
             format.setIndenting(true);
             format.setIndent(2);
-            Writer out = new StringWriter();
+            
+            // Open the stream
+            Utils.createFolder(f.getParentFile());		// Ensure parent folder exists
+			if( !f.delete() )
+				throw new BuildException("Unable to replace file " + f.getAbsolutePath());
+			f.createNewFile();
+			out = new FileOutputStream(f);
+			writer = new OutputStreamWriter(out, "UTF-8");
             XMLSerializer serializer = new XMLSerializer(out, format);
             serializer.serialize(document);
-
-            String output = out.toString();
-            
-			stream.writeText(output);
 		} catch (ParserConfigurationException e) {
 			throw new BuildException(e);
 		} catch (UnsupportedEncodingException e) {
@@ -157,11 +158,12 @@ public class FieldExport extends BaseNotesTask {
 		} catch (TransformerFactoryConfigurationError e) {
 			throw new BuildException(e);
 		} finally {
+			Utils.closeQuietly(writer);
+			Utils.closeQuietly(out);
+			
 			Utils.recycleQuietly(doc);
 			Utils.recycleQuietly(exporter);
 			Utils.recycleQuietly(nc);
-			Utils.closeQuietly(stream);
-			Utils.recycleQuietly(stream);
 			Utils.recycleQuietly(db);
 		}
 	}
