@@ -234,6 +234,12 @@ Will copy a database.
 
 The "templatecheck" parameter will make the task check that the copied database is declaring the given template name (after copy). This will fail if the server already contains a database that declares the same template name. Yes, I love Domino... 
 
+### databaseCreate ###
+
+Will create a new empty database. The ACL will contain only one entry with default set to manager.
+
+	<databaseCreate server="SERVER/ASI" database="newDb.nsf"/>
+
 ### signWithServerId ###
 
 Will sign the given database with the server ID. This task will create an administration request, and wait for adminp to process it.

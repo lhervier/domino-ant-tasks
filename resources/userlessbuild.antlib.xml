@@ -13,6 +13,7 @@
 	<taskdef name="httpStart" classname="fr.asi.designer.anttasks.domino.impl.HttpStart"/>
 	<taskdef name="databaseDelete" classname="fr.asi.designer.anttasks.domino.impl.DatabaseDelete"/>
 	<taskdef name="databaseCopy" classname="fr.asi.designer.anttasks.domino.impl.DatabaseCopy"/>
+	<taskdef name="databaseCreate" classname="fr.asi.designer.anttasks.domino.impl.DatabaseCreate"/>
 	<taskdef name="databaseReplicate" classname="fr.asi.designer.anttasks.domino.impl.DatabaseReplicate"/>
 	<taskdef name="signWithServerId" classname="fr.asi.designer.anttasks.domino.impl.SignWithServerId"/>
 	<taskdef name="clearDb" classname="fr.asi.designer.anttasks.domino.impl.ClearDb"/>
