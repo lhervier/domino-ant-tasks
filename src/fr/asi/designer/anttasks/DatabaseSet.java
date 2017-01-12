@@ -59,12 +59,13 @@ public class DatabaseSet extends ConditionBase {
 		else
 			server = this.server;
 		
-		// Extract the list of all the corresponding databases
+		// Database set points to as single database
 		if( !Utils.isEmpty(this.database) ) {
-			if( this.isSelectedDatabase(this.database) ) {
+			if( this.isSelectedDatabase(server, this.database) ) {
 				ret.add(openDatabase(this.parentDatabaseSetElement.getSession(), server, this.database));
 			}
 		
+		// Database set points to all databases that rely on a given template
 		} else if( !Utils.isEmpty(this.template) ) {
 			DbDirectory dir = null;
 			try {
@@ -92,14 +93,15 @@ public class DatabaseSet extends ConditionBase {
 	/**
 	 * Returns true if the selected database must be part
 	 * of the database set
+	 * @param server the server
 	 * @param database the database
 	 * @return true or false
 	 * @throws NotesException
 	 */
-	private boolean isSelectedDatabase(String database) throws NotesException {
+	private boolean isSelectedDatabase(String server, String database) throws NotesException {
 		Database db = null;
 		try {
-			db = openDatabase(this.parentDatabaseSetElement.getSession(), this.parentDatabaseSetElement.getServer(), database);
+			db = openDatabase(this.parentDatabaseSetElement.getSession(), server, database);
 			return this.isSelectedDatabase(db);
 		} finally {
 			Utils.recycleQuietly(db);

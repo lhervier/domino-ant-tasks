@@ -489,9 +489,34 @@ This task will check that the given databases contains only XPages that have bee
 
 # Additionnal Ant conditions #
 
+When applicable, the conditions will support a databaseSet. But databaseSets can also support inner conditions.
+Note that databaseSet declared inside a condition that is itself inside a databaseSet will be ignored. The condition will be forced to run on the current database, as defined in the databaseSet.
+
+For example :
+
+	<databaseDelete password="password">
+		<databaseSet template="tmpl">
+			<documentExists formula="Form = 'param'">
+		</databaseSet>
+	</databaseDelete>
+
+If the "documentExists" condition defines a databaseSet (or a database/server attribute), they will be ignored as the condition will be ran on each database from the database set.
+
+So the above script is equivalent to this one (which is non sens !!!)
+	
+	<databaseDelete password="password">
+		<databaseSet template="tmpl">
+			<documentExists formula="Form = 'param'" server="SERVER/ASI" database="mydb.nsf">
+				<databaseSet template="othertmpl"/>
+			</documentExists>
+		</databaseSet>
+	</databaseDelete>
+
+The server/database attributes and the nested databaseSet will be ignored.
+
 ## documentExists ##
 
-this condition allows you to define a property if the given database contains at least one document that match a given formula.
+This condition check if the given database contains at least one document that match a given formula.
 
 	<project name="test" basedir="." default="test" xmlns:if="ant:if">
 		<property name="PASSWORD" value="mypassword"/>
@@ -527,6 +552,16 @@ The condition can also be inside a databaseSet tag.
 			</not>
 		</databaseSet>
 	</dxlImport>
+
+And the condition can contain a databaseSet tag :
+
+	<condition property="param.exists.everywhere">
+		<documentExists formula="Form = 'param'">
+			<databaseSet template="tmpl"/>
+		</documentExists>
+	</condition>
+
+This will check if every database on the server that are using the "tmpl" template defines at least one document that uses the "param" form. The property "param.exists.everywhere" will be defined is this is the case.
 
 ## fieldsExists ##
 

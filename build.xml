@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="userlessbuild-ant-tasks" basedir="." default="build">
 	<property name="notes.home" value="D:/IBM/Notes"/>
+	<property name="ant.home" value="D:/ant/"/>
 	<property name="src.dir" value="src"/>
     <property name="classes.dir" value="bin"/>
 	<property name="resources.dir" value="resources"/>
@@ -26,6 +27,7 @@
 				debug="on">
 			<classpath>
 				<fileset dir="lib" includes="*.jar"/>
+				<fileset dir="${ant.home}/lib/" includes="*.jar"/>
 				<fileset file="${notes.home}/jvm/lib/ext/Notes.jar"/>
 			</classpath>
 		</javac>
