@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project 
+		name="test-documentExists" 
+		basedir="." 
+		default="test" 
+		xmlns:if="ant:if"
+		xmlns:unless="ant:unless">
+	<property name="password" value=""/>
+	<property name="server" value=""/>
+	<property name="db" value=""/>
+	<taskdef resource="userlessbuild.antlib.xml"/>
+	<target name="test">
+		
+		<condition property="doc1.exists">
+			<documentExists password="${password}" server="${server}" database="${db}" formula="Form = 'test'"/>
+		</condition>
+		<echo if:set="doc1.exists">Exists / No databaseSet</echo>
+		
+		<condition property="doc2.does.not.exists">
+			<documentExists password="${password}" server="${server}" database="${db}" formula="Form = 'testXX'"/>
+		</condition>
+		<echo unless:set="doc2.does.not.exists">Does not exists / No databaseSet</echo>
+		
+		<condition property="doc3.exists">
+			<documentExists password="${password}" formula="Form = 'test'">
+				<databaseSet server="${server}" database="${db}"/>
+			</documentExists>
+		</condition>
+		<echo if:set="doc3.exists">Exists / DatabaseSet</echo>
+	</target>
+</project>

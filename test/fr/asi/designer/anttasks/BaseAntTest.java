@@ -87,7 +87,7 @@ public abstract class BaseAntTest extends TestCase {
 			InputStream in = null;
 			OutputStream out = null;
 			try {
-				in = Thread.currentThread().getContextClassLoader().getResourceAsStream("fr/asi/designer/anttasks/build/" + buildXml);
+				in = Thread.currentThread().getContextClassLoader().getResourceAsStream("fr/asi/designer/anttasks/" + buildXml);
 				out = new FileOutputStream(f);
 				byte[] buffer = new byte[4 * 1024];
 				int read = in.read(buffer);

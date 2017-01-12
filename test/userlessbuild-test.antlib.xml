@@ -1,0 +1,3 @@
+<antlib>
+	<taskdef name="dummy" classname="fr.asi.designer.anttasks.DummyTask"/>
+</antlib>

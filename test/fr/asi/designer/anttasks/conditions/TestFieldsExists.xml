@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project 
+		name="test-fieldsExists" 
+		basedir="." 
+		default="test" 
+		xmlns:if="ant:if"
+		xmlns:unless="ant:unless">
+	<taskdef resource="userlessbuild.antlib.xml"/>
+	<target name="test">
+		<condition property="both">
+			<fieldsExists 
+					password="${password}" 
+					server="${server}" 
+					database="${db}" 
+					formula="Form = 'Both'" 
+					fields="Field1,Field2"/>
+		</condition>
+		<echo if:set="both">Exists both / No databaseSet</echo>
+		
+		<condition property="second.empty">
+			<fieldsExists 
+					password="${password}" 
+					server="${server}" 
+					database="${db}" 
+					formula="Form = 'SecondEmpty'" 
+					fields="Field1,Field2"/>
+		</condition>
+		<echo unless:set="second.empty">Second empty / No databaseSet</echo>
+		
+		<condition property="second.missing">
+			<fieldsExists 
+					password="${password}" 
+					server="${server}" 
+					database="${db}" 
+					formula="Form = 'SecondMissing'" 
+					fields="Field1,Field2"/>
+		</condition>
+		<echo unless:set="second.missins">Second missing / No databaseSet</echo>
+		
+		<condition property="both.databaseSet">
+			<fieldsExists 
+					password="${password}" 
+					formula="Form = 'Both'" 
+					fields="Field1,Field2">
+				<databaseSet server="${server}" database="${db}"/> 
+			</fieldsExists>
+		</condition>
+		<echo if:set="both.databaseSet">Exists both / DatabaseSet</echo>
+	</target>
+</project>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="test-databaseSet" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
+	<taskdef resource="userlessbuild.antlib.xml"/>
+	<taskdef resource="userlessbuild-test.antlib.xml"/>
+	
+	<!-- This will create a dummy document (based on form 'Dummy') in every selected database -->
+	<target name="testTask">
+		<dummy form="Dummy" password="${password}" server="${server}" database="${db3}">
+			<databaseSet database="${db4}"/>
+			<databaseSet template="${masterTemplateName}">
+				<documentExists formula="Form = 'Param'"/>
+			</databaseSet>
+		</dummy>
+		
+		<condition property="exists1">
+			<documentExists password="${password}" server="${server}" database="${db1}" formula="Form = 'Dummy'"/>
+		</condition>
+		<echo if:set="exists1">Doc created in db1</echo>
+		
+		<condition property="exists2">
+			<documentExists password="${password}" server="${server}" database="${db2}" formula="Form = 'Dummy'"/>
+		</condition>
+		<echo unless:set="exists2">Doc NOT created in db2</echo>
+		
+		<condition property="exists3">
+			<documentExists password="${password}" server="${server}" database="${db3}" formula="Form = 'Dummy'"/>
+		</condition>
+		<echo if:set="exists3">Doc created in db3</echo>
+		
+		<condition property="exists4">
+			<documentExists password="${password}" server="${server}" database="${db4}" formula="Form = 'Dummy'"/>
+		</condition>
+		<echo if:set="exists4">Doc created in db4</echo>
+	</target>
+	
+	<target name="testCondition">
+		<dummy form="TestInner" password="${password}">
+			<databaseSet server="${server}" database="${db1}">
+				<documentExists formula="Form = 'Param'">
+					<!-- This will be ignored -->
+					<databaseSet server="${server}" database="${db2}"/>
+				</documentExists>
+			</databaseSet>
+		</dummy>
+		
+		<condition property="exists1">
+			<documentExists password="${password}" server="${server}" database="${db1}" formula="Form = 'TestInner'"/>
+		</condition>
+		<echo if:set="exists1">Doc created in db1</echo>
+		
+		<condition property="ok1">
+			<documentExists password="${password}" formula="Form = 'Param'">
+				<databaseSet server="${server}" template="${masterTemplateName}"/>
+			</documentExists>
+		</condition>
+		<echo unless:set="ok1">Param doc DOES NOT exists in all databases that rely on ${masterTemplateName}</echo>
+		
+		<condition property="ok2">
+			<documentExists password="${password}" formula="Form = 'Param'">
+				<databaseSet server="${server}" database="${db1}"/>
+			</documentExists>
+		</condition>
+		<echo if:set="ok2">Param doc exists in database ${db1}</echo>
+	</target>
+</project>
