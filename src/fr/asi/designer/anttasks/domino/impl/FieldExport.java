@@ -140,8 +140,9 @@ public class FieldExport extends BaseNotesTask {
             
             // Open the stream
             Utils.createFolder(f.getParentFile());		// Ensure parent folder exists
-			if( !f.delete() )
-				throw new BuildException("Unable to replace file " + f.getAbsolutePath());
+			if( f.exists() )
+	            if( !f.delete() )
+					throw new BuildException("Unable to replace file " + f.getAbsolutePath());
 			f.createNewFile();
 			out = new FileOutputStream(f);
 			writer = new OutputStreamWriter(out, "UTF-8");
