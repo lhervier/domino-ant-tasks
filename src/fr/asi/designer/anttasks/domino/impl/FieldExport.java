@@ -117,6 +117,7 @@ public class FieldExport extends BaseNotesTask {
 			
 			// Export the only document as a native DXL string
 			exporter = session.createDxlExporter();
+			exporter.setRichTextOption(DxlExporter.DXLRICHTEXTOPTION_RAW);
 			exporter.setOutputDOCTYPE(false);
 			String dxl = exporter.exportDxl(doc);
 			if( !EXPORT_SUCCESS.equals(exporter.getLog()) )

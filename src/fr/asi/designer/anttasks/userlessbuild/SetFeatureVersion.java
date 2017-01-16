@@ -49,7 +49,7 @@ public class SetFeatureVersion extends Task {
 			this.log("Setting version " + this.version + " in feature.xml file : " + this.featureXmlFile, Project.MSG_INFO);
 			File f = new File(this.getProject().getProperty("basedir") + "/" + this.featureXmlFile);
 			
-			String content = Utils.readFile(f);
+			String content = Utils.readFile(f, "UTF-8");
 				
 			boolean inFeature = false;
 			boolean updated = false;

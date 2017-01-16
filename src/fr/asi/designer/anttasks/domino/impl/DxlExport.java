@@ -92,6 +92,7 @@ public class DxlExport extends BaseNotesTask {
 			
 			// Export as a native DXL string
 			exporter = session.createDxlExporter();
+			exporter.setRichTextOption(DxlExporter.DXLRICHTEXTOPTION_RAW);
 			exporter.setOutputDOCTYPE(false);
 			String dxl = exporter.exportDxl(nc);
 			if( !EXPORT_SUCCESS.equals(exporter.getLog()) )

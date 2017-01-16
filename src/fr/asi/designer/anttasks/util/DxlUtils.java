@@ -21,7 +21,7 @@ public class DxlUtils {
 			String title, 
 			String templateName, 
 			String fromTemplate) throws IOException {
-		String content = Utils.readFile(f);
+		String content = Utils.readFile(f, "UTF-8");
 		
 		String dxl = "";
 		Reader reader = new StringReader(content);
@@ -117,7 +117,7 @@ public class DxlUtils {
 			String title, 
 			String templateName, 
 			String fromTemplate) throws IOException {
-		String content = Utils.readFile(f);
+		String content = Utils.readFile(f, "UTF-8");
 		
 		String dxl = "";
 		Reader reader = new StringReader(content);

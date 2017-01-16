@@ -32,19 +32,34 @@ public class Utils {
 	}
 	
 	/**
-	 * Read the content of a file
-	 * Content must be encoded using UTF-8
+	 * Read the content of a file.
 	 * @param f the file to read
+	 * @param encoding the content encoding
 	 * @return the text content of the file
 	 * @throws IOException 
 	 */
-	public final static String readFile(File f) throws IOException {
-		StringBuffer sb = new StringBuffer();
+	public final static String readFile(File f, String encoding) throws IOException {
 		InputStream in = null;
-		Reader reader = null;
 		try {
 			in = new FileInputStream(f);
-			reader = new InputStreamReader(in, "UTF-8");
+			return Utils.read(in, encoding);
+		} finally {
+			closeQuietly(in);
+		}
+	}
+	
+	/**
+	 * Read the content of a stream.
+	 * @param in the stream to read
+	 * @param encoding the encoding to use
+	 * @return the text content of the file
+	 * @throws IOException 
+	 */
+	public final static String read(InputStream in, String encoding) throws IOException {
+		StringBuffer sb = new StringBuffer();
+		Reader reader = null;
+		try {
+			reader = new InputStreamReader(in, encoding);
 			char[] buffer = new char[4 * 1024];
 			int read = reader.read(buffer);
 			while( read != -1 ) {

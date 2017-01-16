@@ -50,7 +50,7 @@ public class SetManifestVersion extends Task {
 			
 			File f = new File(this.getProject().getProperty("basedir") + "/" + this.manifestFile);
 			
-			String content = Utils.readFile(f);
+			String content = Utils.readFile(f, "UTF-8");
 			
 			String manifest = "";
 			Reader reader = new StringReader(content);

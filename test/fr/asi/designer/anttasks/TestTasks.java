@@ -1,6 +1,9 @@
 package fr.asi.designer.anttasks;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
@@ -15,6 +18,7 @@ import lotus.domino.RichTextItem;
 import lotus.domino.Session;
 import fr.asi.designer.anttasks.domino.impl.DatabaseCreate;
 import fr.asi.designer.anttasks.util.DominoUtils;
+import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * Test for the ant tasks
@@ -22,11 +26,26 @@ import fr.asi.designer.anttasks.util.DominoUtils;
  */
 public class TestTasks extends BaseAntTest {
 
-	public static String RICH_TEXT = 
-		"<root>\r\n" + 
-		"	<child1>\r\n" + 
-		"</root>";
+	/**
+	 * Content of the sample rich text
+	 */
+	public String richTextContent;
 	
+	/**
+	 * @see fr.asi.designer.anttasks.BaseAntTest#setUp()
+	 */
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		
+		// Read content of our test rich text content.
+		// This content is a XML content.
+		this.richTextContent = Utils.read(
+				Thread.currentThread().getContextClassLoader().getResourceAsStream("fr/asi/designer/anttasks/tasks/dummyRichTextContent.txt"),
+				"UTF-8"
+		);
+	}
+
 	/**
 	 * Test the DXL Export and import task
 	 */
@@ -64,8 +83,9 @@ public class TestTasks extends BaseAntTest {
 					v.addAll(Arrays.asList("Valeur1", "Valeur2"));
 					doc.replaceItemValue("Multi", v);
 					
+					// Insert the text content as a single paragraph
 					RichTextItem rtIt = doc.createRichTextItem("RtItem");
-					rtIt.appendText(RICH_TEXT);
+					rtIt.appendText(TestTasks.this.richTextContent);
 					
 					doc.save(true, false);
 				}
@@ -105,7 +125,7 @@ public class TestTasks extends BaseAntTest {
 					
 					RichTextItem rtIt = (RichTextItem) doc.getFirstItem("RtItem");
 					String s = rtIt.getUnformattedText();
-					Assert.assertEquals(RICH_TEXT, s);
+					Assert.assertEquals(TestTasks.this.richTextContent, s);
 					
 					doc = coll.getNextDocument();
 				}
@@ -143,10 +163,22 @@ public class TestTasks extends BaseAntTest {
 				Vector<String> v = new Vector<String>();
 				v.addAll(Arrays.asList("Valeur1", "Valeur2"));
 				source.replaceItemValue("Multi", v);
+				
+				// Insert the rich text as multiple paragraphs (like when editing with the notes client)
 				RichTextItem rtIt = source.createRichTextItem("RtItem");
-				rtIt.appendText("1st Paragraph");
-				rtIt.addNewLine();
-				rtIt.appendText("2nd Paragraph");
+				StringReader sreader = new StringReader(TestTasks.this.richTextContent);
+				BufferedReader breader = new BufferedReader(sreader);
+				try {
+					String line = breader.readLine();
+					while( line != null ) {
+						rtIt.appendText(line);
+						rtIt.addNewLine();
+						line = breader.readLine();
+					}
+				} catch(IOException e) {
+					throw new RuntimeException(e);
+				}
+				
 				source.save(true, false);
 				
 				// The destination doc
@@ -178,8 +210,9 @@ public class TestTasks extends BaseAntTest {
 				Assert.assertNotNull(multi);
 				Assert.assertEquals(2, multi.getValues().size());
 				
-				RichTextItem i = (RichTextItem) doc.getFirstItem("RtItem");
-				Assert.assertNotNull(i);
+				RichTextItem rtIt = (RichTextItem) doc.getFirstItem("RtItem");
+				String s = rtIt.getUnformattedText();
+				Assert.assertEquals(TestTasks.this.richTextContent, s);
 				
 				return null;
 			}

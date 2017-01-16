@@ -48,7 +48,7 @@ public class SetUpdateSiteVersion extends Task {
 		this.log("Setting features version to " + this.version + " in site.xml file : " + this.siteXmlFile, Project.MSG_INFO);
 		try {
 			File f = new File(this.getProject().getProperty("basedir") + "/" + this.siteXmlFile);
-			String content = Utils.readFile(f);
+			String content = Utils.readFile(f, "UTF-8");
 			
 			String site = "";
 			boolean inSite = false;
