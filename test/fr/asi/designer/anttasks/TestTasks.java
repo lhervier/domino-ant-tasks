@@ -22,6 +22,11 @@ import fr.asi.designer.anttasks.util.DominoUtils;
  */
 public class TestTasks extends BaseAntTest {
 
+	public static String RICH_TEXT = 
+		"<root>\r\n" + 
+		"	<child1>\r\n" + 
+		"</root>";
+	
 	/**
 	 * Test the DXL Export and import task
 	 */
@@ -58,6 +63,10 @@ public class TestTasks extends BaseAntTest {
 					Vector<String> v = new Vector<String>();
 					v.addAll(Arrays.asList("Valeur1", "Valeur2"));
 					doc.replaceItemValue("Multi", v);
+					
+					RichTextItem rtIt = doc.createRichTextItem("RtItem");
+					rtIt.appendText(RICH_TEXT);
+					
 					doc.save(true, false);
 				}
 				
@@ -93,6 +102,10 @@ public class TestTasks extends BaseAntTest {
 					
 					Item i = doc.getFirstItem("IntField");
 					Assert.assertEquals(Item.NUMBERS, i.getType());
+					
+					RichTextItem rtIt = (RichTextItem) doc.getFirstItem("RtItem");
+					String s = rtIt.getUnformattedText();
+					Assert.assertEquals(RICH_TEXT, s);
 					
 					doc = coll.getNextDocument();
 				}
