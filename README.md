@@ -6,12 +6,14 @@ This projet contains a set of ant tasks to work with IBM Domino servers.
 
 A ready to install version of the ant tasks is available at :
 
-<a href="https://www.dropbox.com/s/k2jsqs1ack0u2sb/userlessbuild-ant-tasks-1.1.b2.jar?dl=0">Ant Tasks for Headless Designer</a>
+<a href="https://www.dropbox.com/s/k2jsqs1ack0u2sb/userlessbuild-ant-tasks-1.1.b2.jar?dl=0">Ant Tasks for Domino</a>
 
 ## Compile it yourself ##
 
-- Install ant: http://ant.apache.org
-- Update the build.xml to change the value of the "notes.home" property so that it points to the root of the install of your local Notes client.
+- Install ant: http://ant.apache.org (intall java, unzip ant, create env variables JAVA\_HOME and ANT\_HOME)
+- Update the build.xml to change the value of the following properties :
+	- notes.home : Must point to the root of the install of your local Notes client.
+	- ant.home : Must to point to the root of your local ant install.
 - In a DOS console, run "ant"
 - The compiled library will be made available in the "build" folder.
 
@@ -26,6 +28,10 @@ Next, you will have to ask ant to run build.xml files using the local Notes Clie
 	${NOTES_ROOT}/jvm  
 
 Where NOTES_ROOT is where you installed your notes client.
+
+## Alternative: Running ant using another JVM ##
+
+You will have to include your Notes client install folder in the PATH, and add the Notes.jar (present in jvm/lib/ext) file in your ant classpath.
 
 ## Declaring the tasks in a build.xml file ##
 
