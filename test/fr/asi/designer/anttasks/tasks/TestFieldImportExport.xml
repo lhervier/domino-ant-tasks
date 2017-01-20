@@ -11,9 +11,9 @@
 				toFile="${file}"/>
 		<fieldImport
 				password="${password}"
-				server="${server}" 
-				database="${db}"
 				formula="Form = 'Import'"
-				fromFile="${file}"/>
+				fromFile="${file}">
+			<databaseSet server="${server}" database="${db}"/>
+		</fieldImport>
 	</target>
 </project>
