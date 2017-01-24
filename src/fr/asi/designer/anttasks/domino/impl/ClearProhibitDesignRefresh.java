@@ -11,6 +11,14 @@ import fr.asi.designer.anttasks.domino.BaseDesignElementTask;
  */
 public class ClearProhibitDesignRefresh extends BaseDesignElementTask {
 
+	/**
+	 * Dry run ?
+	 */
+	private boolean dryRun = false;
+	
+	/**
+	 * @see fr.asi.designer.anttasks.domino.BaseDesignElementTask#execute(fr.asi.designer.anttasks.domino.BaseDesignElementTask.Type, lotus.domino.Document)
+	 */
 	@Override
 	protected void execute(Type type, Document designElement) throws NotesException {
 		String flags = designElement.getItemValueString("$Flags");
@@ -21,8 +29,20 @@ public class ClearProhibitDesignRefresh extends BaseDesignElementTask {
 		String server = designElement.getParentDatabase().getServer();
 		String db = designElement.getParentDatabase().getFilePath();
 		log(server + "!!" + db + ": Removing 'prohibit design refresh' flag from '" + designElement.getItemValueString("$TITLE") + "' (" + designElement.getUniversalID() + " / " + type + ")");
+		
+		if( this.dryRun )
+			return;
+		
 		flags = flags.substring(0, pos) + flags.substring(pos + 1);
 		designElement.replaceItemValue("$Flags", flags);
 		designElement.save(true, false);
+	}
+	
+
+	/**
+	 * @param dryRun the dryRun to set
+	 */
+	public void setDryRun(boolean dryRun) {
+		this.dryRun = dryRun;
 	}
 }

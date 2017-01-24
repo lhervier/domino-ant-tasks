@@ -11,6 +11,11 @@ import fr.asi.designer.anttasks.domino.BaseDesignElementTask;
 public class ClearInheritTemplateFrom extends BaseDesignElementTask {
 
 	/**
+	 * Dry run ?
+	 */
+	private boolean dryRun = false;
+	
+	/**
 	 * @see fr.asi.designer.anttasks.domino.BaseDesignElementTask#execute(fr.asi.designer.anttasks.domino.BaseDesignElementTask.Type, lotus.domino.Document)
 	 */
 	@Override
@@ -21,8 +26,19 @@ public class ClearInheritTemplateFrom extends BaseDesignElementTask {
 		String server = designElement.getParentDatabase().getServer();
 		String db = designElement.getParentDatabase().getFilePath();
 		log(server + "!!" + db + ": Removing template inheritance for '" + designElement.getItemValueString("$TITLE") + "' (" + designElement.getUniversalID() + " / " + type + ")");
+		
+		if( this.dryRun )
+			return;
+		
 		designElement.removeItem("$Class");
 		designElement.save(true, false);
+	}
+
+	/**
+	 * @param dryRun the dryRun to set
+	 */
+	public void setDryRun(boolean dryRun) {
+		this.dryRun = dryRun;
 	}
 
 }
