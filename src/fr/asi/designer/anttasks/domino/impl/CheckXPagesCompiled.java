@@ -9,6 +9,7 @@ import fr.asi.designer.anttasks.domino.BaseDesignElementTask;
 /**
  * This task will scan XPages into a set of databases
  * and will verify that have been compiled.
+ * FIXME: Implement a Condition instead of a task.
  * @author Lionel HERVIER
  */
 public class CheckXPagesCompiled extends BaseDesignElementTask {
