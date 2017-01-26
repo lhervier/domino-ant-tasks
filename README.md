@@ -427,13 +427,13 @@ This task allows you to remove the "Prohibit design refresh" flag on a set desig
 			password="mypassword"
 			server="SERVER/ASI"
 			select="VIEWS"
-			dryMode="false">
+			dryRun="false">
 		<databaseSet template="mytemplate"/>
 	</clearProhibitDesignRefresh>
 
 This task will remove the flag from all the views that are present in any database that relies on the "mytemplate" template.
 
-The dryMode parameter (defaults to false) allows you to run the task in "dry mode". It wont update design elements.
+The dryRun parameter (defaults to false) allows you to run the task in "dry mode". It wont update design elements.
 
 Possible values for the select property are :
 
@@ -479,13 +479,13 @@ This task will clear the name of the template that a design element depends on.
 			password="mypassword"
 			server="SERVER/ASI"
 			select="VIEWS"
-			dryMode="false">
+			dryRun="false">
 		<databaseSet template="mytemplate"/>
 	</clearInheritTemplateFrom>
 
 This taks will remove the name of the name of template that every view of every databases that depends on the "mytemplate" depends on.
 
-The dryMode parameter (defaults to false) allows you to run the task in "dry mode". It wont update design elements.
+The dryRun parameter (defaults to false) allows you to run the task in "dry mode". It wont update design elements.
 
 For the "select" property, you can use the same list as the clearProhibitDesignRefresh task.
 
