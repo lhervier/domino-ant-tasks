@@ -25,7 +25,7 @@ public class ClearInheritTemplateFrom extends BaseDesignElementTask {
 		
 		String server = designElement.getParentDatabase().getServer();
 		String db = designElement.getParentDatabase().getFilePath();
-		log(server + "!!" + db + ": Removing template inheritance for '" + designElement.getItemValueString("$TITLE") + "' (" + designElement.getUniversalID() + " / " + type + ")");
+		log(server + "!!" + db + ": " + (this.dryRun ? "Warning" : "Removing :") + " template inheritance for '" + designElement.getItemValueString("$TITLE") + "' (" + designElement.getUniversalID() + " / " + type + ")");
 		
 		if( this.dryRun )
 			return;
