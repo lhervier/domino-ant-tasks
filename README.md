@@ -438,7 +438,7 @@ The dryRun parameter (defaults to false) allows you to run the task in "dry mode
 Possible values for the select property are :
 
 	+------------------------+---------------------------+
-	| ALL                    | All design elements       |
+	| ALL (default)          | All design elements       |
 	| ACTIONS                | Actions                   |
 	| AGENTS                 | Agents (LS and Java)      |
 	| APPLETS                | Applets                   |

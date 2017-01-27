@@ -55,7 +55,7 @@ public abstract class BaseDesignElementTask extends BaseDatabaseSetTask {
 	/**
 	 * The design elements to select
 	 */
-	private String select;
+	private String select = Type.ALL.name();
 	
 	/**
 	 * Execute the task on the design element
