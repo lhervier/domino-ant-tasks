@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="test-clearProhibitDesignRefresh" basedir=".">
+	<taskdef resource="userlessbuild.antlib.xml"/>
+	<target name="test-standard">
+		<clearProhibitDesignRefresh
+				password="${password}"
+				server="${server}" 
+				database="${db}"/>
+	</target>
+	
+	<target name="test-dryRun">
+		<clearProhibitDesignRefresh
+				password="${password}"
+				server="${server}" 
+				database="${db}"
+				dryRun="true"/>
+	</target>
+</project>

@@ -72,24 +72,6 @@ public abstract class BaseDatabaseSetTask extends BaseNotesTask implements Datab
 		}
 	}
 	
-	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#delegate(java.lang.Class)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends BaseNotesTask> T delegate(Class<T> cl) {
-		T ret = super.delegate(cl);
-		if( !(ret instanceof BaseDatabaseSetTask) )
-			return ret;
-		
-		BaseDatabaseSetTask ret2 = (BaseDatabaseSetTask) ret;
-		ret2.database = this.database;
-		ret2.server = this.server;
-		ret2.databases = this.databases;
-		
-		return (T) ret2;
-	}
-
 	// ==============================================================
 	
 	/**

@@ -16,6 +16,7 @@ import lotus.domino.Item;
 import lotus.domino.NotesException;
 import lotus.domino.RichTextItem;
 import lotus.domino.Session;
+import lotus.domino.View;
 import fr.asi.designer.anttasks.domino.impl.DatabaseCreate;
 import fr.asi.designer.anttasks.util.DominoUtils;
 import fr.asi.designer.anttasks.util.Utils;
@@ -214,6 +215,58 @@ public class TestTasks extends BaseAntTest {
 				String s = rtIt.getUnformattedText();
 				Assert.assertEquals(TestTasks.this.richTextContent, s);
 				
+				return null;
+			}
+		});
+	}
+	
+	/**
+	 * Test the clearProhibitDesignRefreshTask
+	 */
+	public void testClearProhibitDesignRefresh() throws Exception {
+		this.setProperty("db", "tests/testClearProhibitDesignRefresh.nsf");
+		
+		// Create the main database
+		DatabaseCreate create = new DatabaseCreate();
+		create.setPassword(this.getProperty("password"));
+		create.setServer(this.getProperty("server"));
+		create.setDatabase(this.getProperty("db"));
+		create.execute();
+		
+		// Normal run => Create a view as prohibit design refresh, and clear the flag
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				View v = db.createView("testClearProhibitDesignRefresh");
+				v.setProhibitDesignRefresh(true);
+				return null;
+			}
+		});
+		this.runAntTask("tasks/TestClearProhibitDesignRefresh.xml", "test-standard");
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				View v = db.getView("testClearProhibitDesignRefresh");
+				Assert.assertFalse(v.isProhibitDesignRefresh());
+				return null;
+			}
+		});
+		
+		// Dry run
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				View v = db.getView("testClearProhibitDesignRefresh");
+				v.setProhibitDesignRefresh(true);
+				return null;
+			}
+		});
+		this.runAntTask("tasks/TestClearProhibitDesignRefresh.xml", "test-dryRun");
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				View v = db.getView("testClearProhibitDesignRefresh");
+				Assert.assertTrue(v.isProhibitDesignRefresh());
 				return null;
 			}
 		});

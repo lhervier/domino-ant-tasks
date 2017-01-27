@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Field;
 
 import lotus.domino.Base;
 import lotus.domino.NotesException;
@@ -179,6 +180,24 @@ public class Utils {
 			o.recycle();
 		} catch(NotesException e) {
 			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Return a field for a given class
+	 * @param cl the class
+	 * @param name the name of the field
+	 * @return the value
+	 * @throws NoSucFieldException if the field does not exists
+	 */
+	public static Field getField(Class<?> cl, String name) throws NoSuchFieldException {
+		try {
+			return cl.getDeclaredField(name);
+		} catch(NoSuchFieldException e) {
+			if( cl.equals(Object.class) )
+				throw e;
+			else
+				return getField(cl.getSuperclass(), name);
 		}
 	}
 }
