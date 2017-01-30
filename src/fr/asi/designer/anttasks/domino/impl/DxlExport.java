@@ -152,13 +152,13 @@ public class DxlExport extends BaseNotesTask {
 	private void clean(Element rootElt) {
 		// Clean database tag
 		DOMUtils.removeAttributes(rootElt, "replicaid", "version", "path", "maintenanceversion");
-		DOMUtils.removeChild(rootElt, "databaseinfo");
+		DOMUtils.removeChild(rootElt, "databaseinfo", "fulltextsettings", "launchsettings");
 		
 		// Clean documents
 		NodeList docLst = rootElt.getElementsByTagName("document");
 		for( int i=0; i<docLst.getLength(); i++ ) {
 			Element doc = (Element) docLst.item(i);
-			DOMUtils.removeChild(doc, "noteinfo", "updatedby");
+			DOMUtils.removeChild(doc, "noteinfo", "updatedby", "revisions");
 		}
 	}
 	
