@@ -69,7 +69,7 @@ public class RunDesignerCommands extends Task {
 			FileUtils.delete(new File("HEADLESS0.log"));
 			FileUtils.delete(new File("HEADLESSJOB0.log"));
 			
-			File command = Utils.createFile(this.commands);
+			File command = Utils.createFile(this.commands, "UTF-8");
 			Runtime rtm = Runtime.getRuntime();
 			Process p = rtm.exec(
 					this.designerPath + "designer.exe " + 

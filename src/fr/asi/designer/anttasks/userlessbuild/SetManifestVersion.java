@@ -65,7 +65,7 @@ public class SetManifestVersion extends Task {
 			breader.close();
 			reader.close();
 			
-			Utils.createFile(f, manifest);
+			Utils.createFile(f, manifest, "UTF-8");
 		} catch (IOException e) {
 			this.log(e, Project.MSG_ERR);
 			throw new RuntimeException(e);

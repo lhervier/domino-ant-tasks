@@ -86,7 +86,7 @@ public class SetUpdateSiteVersion extends Task {
 			breader.close();
 			reader.close();
 			
-			Utils.createFile(f, site);
+			Utils.createFile(f, site, "UTF-8");
 		} catch (IOException e) {
 			this.log(e, Project.MSG_ERR);
 			throw new RuntimeException(e);

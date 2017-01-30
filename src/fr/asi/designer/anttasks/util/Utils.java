@@ -1,5 +1,6 @@
 package fr.asi.designer.anttasks.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,9 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
-import java.io.Writer;
 import java.lang.reflect.Field;
 
 import lotus.domino.Base;
@@ -125,7 +124,6 @@ public class Utils {
 		Utils.createFolder(folder.getParentFile());
 		folder.mkdir();
 	}
-
 	
 	/**
 	 * Create a new file with the given content
@@ -133,18 +131,69 @@ public class Utils {
 	 * @return the newly created temporary file
 	 * @throws IOException 
 	 */
-	public final static File createFile(String content) throws IOException {
-		File f = File.createTempFile("file", "tmp");
-		return Utils.createFile(f, content);
+	public final static File createFile(String content, String encoding) throws IOException {
+		return Utils.createFile(null, content, encoding);
+	}
+	
+	/**
+	 * Create a new file from the classpath
+	 * @param path path to the content in the classpath
+	 * @return the newly created temporary file
+	 * @throws IOException
+	 */
+	public final static File createFileFromClassPath(String path) throws IOException {
+		return Utils.createFileFromClassPath(null, path);
+	}
+	
+	/**
+	 * Create a file from the classpath
+	 * @param f the file to fill with
+	 * @param path path to the content in the classpath
+	 * @return the newly created temporary file
+	 * @throws IOException
+	 */
+	public final static File createFileFromClassPath(File f, String path) throws IOException {
+		InputStream in = null;
+		try {
+			in = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+			return createFile(f, in);
+		} finally {
+			Utils.closeQuietly(in);
+		}
 	}
 
 	/**
 	 * Create a new file with the given content
-	 * @param content the content to set (using UTF-8 encoding)
+	 * @param f the file to create
+	 * @param content the content to set
+	 * @param encoding the encoding of the content
 	 * @return the file
 	 * @throws IOException 
 	 */
-	public final static File createFile(File f, String content) throws IOException {
+	public final static File createFile(File f, String content, String encoding) throws IOException {
+		ByteArrayInputStream bais = null;
+		try {
+			bais = new ByteArrayInputStream(content.getBytes(encoding));
+			return createFile(f, bais);
+		} finally {
+			Utils.closeQuietly(bais);
+		}
+	}
+	
+	/**
+	 * Create a new file with the given content
+	 * @param file the file to create
+	 * @param in inputstream to the content of the file
+	 * @return the file
+	 * @throws IOException 
+	 */
+	public final static File createFile(File f, InputStream in) throws IOException {
+		// Create a temp file if needed
+		if( f == null ) {
+			f = File.createTempFile("file", "tmp");
+			f.deleteOnExit();
+		}
+		
 		// On s'assure que son dossier parent existe
 		createFolder(f.getParentFile());
 		
@@ -157,18 +206,20 @@ public class Utils {
 		
 		// Envoi le contenu dans le fichier
 		OutputStream out = null;
-		Writer writer = null;
 		try {
 			out = new FileOutputStream(f);
-			writer = new OutputStreamWriter(out, "UTF-8");
-			writer.write(content);
+			byte[] buffer = new byte[4 * 1024];
+			int read = in.read(buffer);
+			while( read != -1 ) {
+				out.write(buffer, 0, read);
+				read = in.read(buffer);
+			}
 		} finally {
-			Utils.closeQuietly(writer);
 			Utils.closeQuietly(out);
 		}
 		return f;
 	}
-
+	
 	/**
 	 * Recycle a notes object
 	 * @param o the object to recycle

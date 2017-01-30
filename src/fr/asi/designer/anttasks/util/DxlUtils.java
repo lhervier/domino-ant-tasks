@@ -100,7 +100,7 @@ public class DxlUtils {
 		breader.close();
 		reader.close();
 		
-		Utils.createFile(f, dxl);
+		Utils.createFile(f, dxl, "UTF-8");
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class DxlUtils {
 		breader.close();
 		reader.close();
 		
-		Utils.createFile(f, dxl);
+		Utils.createFile(f, dxl, "UTF-8");
 	}
 
 }
