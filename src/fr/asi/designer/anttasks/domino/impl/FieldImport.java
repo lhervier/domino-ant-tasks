@@ -87,7 +87,7 @@ public class FieldImport extends BaseDatabaseSetTask {
 			Element fieldRoot = fieldDoc.getDocumentElement();
 			
 			// Extract the field names and corresponding Nodes to a map (useful later)
-			Map<String, Element> fields = new HashMap<String, Element>();
+			Map<String, List<Element>> fields = new HashMap<String, List<Element>>();
 			NodeList fieldsNl = fieldRoot.getChildNodes();
 			for( int i=0; i<fieldsNl.getLength(); i++ ) {
 				Node n = fieldsNl.item(i);
@@ -96,7 +96,12 @@ public class FieldImport extends BaseDatabaseSetTask {
 				Element e = (Element) n;
 				if( !"item".equals(e.getTagName()) )
 					continue;
-				fields.put(e.getAttribute("name"), e);
+				List<Element> elts = fields.get(e.getAttribute("name"));
+				if( elts == null ) {
+					elts = new ArrayList<Element>();
+					fields.put(e.getAttribute("name"), elts);
+				}
+				elts.add(e);
 			}
 			log("=> Fields to import: " + fields.keySet().toString());
 			
@@ -110,6 +115,7 @@ public class FieldImport extends BaseDatabaseSetTask {
 			// Export as a native DXL string
 			exporter = db.getParent().createDxlExporter();
 			exporter.setOutputDOCTYPE(false);
+			exporter.setRichTextOption(DxlExporter.DXLRICHTEXTOPTION_RAW);
 			String dxl = exporter.exportDxl(nc);
 			if( !DxlExport.EXPORT_SUCCESS.equals(exporter.getLog()) )
 				throw new BuildException("Unable to export DXL: " + exporter.getLog());
@@ -130,6 +136,7 @@ public class FieldImport extends BaseDatabaseSetTask {
 				if( !"document".equals(docElt.getTagName()) )
 					continue;
 				
+				// Logging...
 				NodeList noteInfoNl = docElt.getElementsByTagName("noteinfo");
 				if( noteInfoNl.getLength() == 1 ) {
 					Element noteInfo = (Element) noteInfoNl.item(0);
@@ -149,9 +156,11 @@ public class FieldImport extends BaseDatabaseSetTask {
 					docElt.removeChild(n);
 				
 				// Add our fields to the DXL
-				for( Element n : fields.values() ) {
-					Node newNode = docs.importNode(n, true);
-					docElt.appendChild(newNode);
+				for( List<Element> elts : fields.values() ) {
+					for( Element n : elts ) {
+						Node newNode = docs.importNode(n, true);
+						docElt.appendChild(newNode);
+					}
 				}
 			}
 			

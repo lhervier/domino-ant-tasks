@@ -18,6 +18,9 @@ import lotus.domino.RichTextItem;
 import lotus.domino.Session;
 import lotus.domino.View;
 import fr.asi.designer.anttasks.domino.impl.DatabaseCreate;
+import fr.asi.designer.anttasks.domino.impl.DxlImport;
+import fr.asi.designer.anttasks.domino.impl.FieldExport;
+import fr.asi.designer.anttasks.domino.impl.FieldImport;
 import fr.asi.designer.anttasks.util.DominoUtils;
 import fr.asi.designer.anttasks.util.Utils;
 
@@ -215,6 +218,81 @@ public class TestTasks extends BaseAntTest {
 				String s = rtIt.getUnformattedText();
 				Assert.assertEquals(TestTasks.this.richTextContent, s);
 				
+				return null;
+			}
+		});
+	}
+	
+	/**
+	 * Test for fieldImport/fieldExport with complex rich text
+	 */
+	public void testFieldImportExportComplex() throws Exception {
+		// Create a DXL file with a complex rich text
+		File exportFile = Utils.createFileFromClassPath("fr/asi/designer/anttasks/tasks/complexRichText.xml");
+		File fieldFile = File.createTempFile("field", ".dxl");
+		fieldFile.deleteOnExit();
+		
+		// Set the properties
+		this.setProperty("db", "tests/testFieldImportExport2.nsf");
+		this.setProperty("dxlFile", exportFile.getAbsolutePath());
+		this.setProperty("fieldFile", fieldFile.getAbsolutePath());
+		
+		// Create the database
+		DatabaseCreate create = new DatabaseCreate();
+		create.setPassword(this.getProperty("password"));
+		create.setServer(this.getProperty("server"));
+		create.setDatabase(this.getProperty("db"));
+		create.execute();
+		
+		// Import the DXL file into the source database
+		DxlImport dxlImport = new DxlImport();
+		dxlImport.setPassword(this.getProperty("password"));
+		dxlImport.setDatabase(this.getProperty("db"));
+		dxlImport.setServer(this.getProperty("server"));
+		dxlImport.setFromFile(this.getProperty("dxlFile"));
+		dxlImport.execute();
+		
+		// Export the Body field into a file
+		FieldExport fieldExport = new FieldExport();
+		fieldExport.setPassword(this.getProperty("password"));
+		fieldExport.setServer(this.getProperty("server"));
+		fieldExport.setDatabase(this.getProperty("db"));
+		fieldExport.setFormula("Form = 'doc'");
+		fieldExport.setToFile(this.getProperty("fieldFile"));
+		fieldExport.setFields("Body,$FILE");
+		fieldExport.execute();
+		
+		// Create an empty document in the dest db (this document will be updated)
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				Document doc = db.createDocument();
+				doc.replaceItemValue("Form", "docDest");
+				doc.save(true, false);
+				return null;
+			}
+		});
+		
+		// Import the field into the new document
+		FieldImport fieldImport = new FieldImport();
+		fieldImport.setPassword(this.getProperty("password"));
+		fieldImport.setServer(this.getProperty("server"));
+		fieldImport.setDatabase(this.getProperty("db"));
+		fieldImport.setFormula("Form = 'docDest'");
+		fieldImport.setFromFile(this.getProperty("fieldFile"));
+		fieldImport.execute();
+		
+		// Check that the rich text have been correctly imported
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				DocumentCollection coll = db.search("Form = 'docDest'");
+				Assert.assertEquals(1, coll.getCount());
+				Document doc = coll.getFirstDocument();
+				RichTextItem rtIt = (RichTextItem) doc.getFirstItem("Body");
+				Assert.assertNotNull(rtIt);
+				String s = rtIt.getUnformattedText();
+				Assert.assertTrue(s.startsWith("  Aide à l’utilisation d’une application Web"));
 				return null;
 			}
 		});
