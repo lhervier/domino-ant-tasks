@@ -29,7 +29,7 @@ public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
 	/**
 	 * The database set
 	 */
-	private List<DatabaseSet> databases = new ArrayList<DatabaseSet>();
+	private List<DatabaseSet> databaseSet = new ArrayList<DatabaseSet>();
 	
 	/**
 	 * Create an empty databaseSet
@@ -37,7 +37,7 @@ public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
 	public DatabaseSet createDatabaseSet() {
 		DatabaseSet ret = new DatabaseSet();
 		ret.setParentDatabaseSetElement(this);
-		this.databases.add(ret);
+		this.databaseSet.add(ret);
 		return ret;
 	}
 	
@@ -45,7 +45,17 @@ public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
 	 * Clear the database set
 	 */
 	public void clearDatabaseSet() {
-		this.databases.clear();
+		this.databaseSet.clear();
+	}
+	
+	/**
+	 * Returns the databaseSet.
+	 * This method is need so that our object is viewed by the Introspector class
+	 * as a bean with a "databaseSet" property.
+	 * @return the databaseSet
+	 */
+	public List<DatabaseSet> getDatabaseSet() {
+		return this.databaseSet;
 	}
 	
 	/**
@@ -65,7 +75,7 @@ public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
 		try {
 			if( !Utils.isEmpty(this.database) && !Utils.isEmpty(this.server) )
 				dbs.add(openDatabase(this.getSession(), this.server, this.database));
-			for( DatabaseSet s : this.databases )
+			for( DatabaseSet s : this.databaseSet )
 				dbs.addAll(s.getDatabases());
 			
 			// Run execution on each database

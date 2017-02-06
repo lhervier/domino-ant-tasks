@@ -330,6 +330,25 @@ public class TestTasks extends BaseAntTest {
 			}
 		});
 		
+		// Normal run using a databaseSet
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				View v = db.getView("testClearProhibitDesignRefresh");
+				v.setProhibitDesignRefresh(true);
+				return null;
+			}
+		});
+		this.runAntTask("tasks/TestClearProhibitDesignRefresh.xml", "test-databaseSet");
+		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
+			public Void run(Session session) throws NotesException {
+				Database db = DominoUtils.openDatabase(session, TestTasks.this.getProperty("server"), TestTasks.this.getProperty("db"));
+				View v = db.getView("testClearProhibitDesignRefresh");
+				Assert.assertFalse(v.isProhibitDesignRefresh());
+				return null;
+			}
+		});
+		
 		// Dry run
 		DominoUtils.runInSession(this.getProperty("password"), new DominoUtils.NotesRunnable<Void>() {
 			public Void run(Session session) throws NotesException {
