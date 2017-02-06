@@ -6,13 +6,13 @@ import lotus.domino.Session;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 
-import fr.asi.designer.anttasks.BaseNotesElement;
+import fr.asi.designer.anttasks.NotesElement;
 
 /**
  * Base condition using Notes APIs
  * @author Lionel HERVIER
  */
-public abstract class BaseNotesCondition extends BaseNotesElement<Boolean> implements Condition {
+public abstract class NotesCondition extends NotesElement<Boolean> implements Condition {
 
 	/**
 	 * Execution
@@ -21,7 +21,7 @@ public abstract class BaseNotesCondition extends BaseNotesElement<Boolean> imple
 	protected abstract boolean eval(Session session) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.BaseNotesElement#run(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.NotesElement#run(lotus.domino.Session)
 	 */
 	@Override
 	protected Boolean run(Session session) throws NotesException {

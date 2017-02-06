@@ -9,14 +9,14 @@ import lotus.domino.Stream;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * Import a dxl file into a database
  * @author Lionel HERVIER
  */
-public class DxlImport extends BaseDatabaseSetTask {
+public class DxlImport extends DatabaseSetTask {
 
 	/**
 	 * Success log message
@@ -31,7 +31,7 @@ public class DxlImport extends BaseDatabaseSetTask {
 	private String fromFile;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
+	 * @see fr.asi.designer.anttasks.domino.DatabaseSetTask#execute(Database)
 	 */
 	@Override
 	protected void execute(Database db) throws NotesException {

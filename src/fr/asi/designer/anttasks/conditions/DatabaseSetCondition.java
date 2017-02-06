@@ -8,13 +8,13 @@ import lotus.domino.NotesException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.taskdefs.condition.Condition;
 
-import fr.asi.designer.anttasks.BaseDatabaseSetElement;
+import fr.asi.designer.anttasks.DatabaseSetElement;
 
 /**
  * Base Notes condition that rely on a server and a database
  * @author Lionel HERVIER
  */
-public abstract class BaseDatabaseSetCondition extends BaseDatabaseSetElement<Boolean> implements Condition {
+public abstract class DatabaseSetCondition extends DatabaseSetElement<Boolean> implements Condition {
 
 	/**
 	 * Evaluate the condition on the database
@@ -25,7 +25,7 @@ public abstract class BaseDatabaseSetCondition extends BaseDatabaseSetElement<Bo
 	protected abstract boolean eval(List<Database> databases) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.BaseDatabaseSetElement#run(java.util.List)
+	 * @see fr.asi.designer.anttasks.DatabaseSetElement#run(java.util.List)
 	 */
 	@Override
 	protected Boolean run(List<Database> databases) throws NotesException {

@@ -1,6 +1,6 @@
 package fr.asi.designer.anttasks.domino.impl;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
 
@@ -9,7 +9,7 @@ import lotus.domino.Session;
  * 
  * @author Lionel HERVIER & Philippe ARDIT
  */
-public class DatabaseReplicate extends BaseNotesTask {
+public class DatabaseReplicate extends NotesTask {
 
 	/**
 	 * The source server
@@ -48,7 +48,7 @@ public class DatabaseReplicate extends BaseNotesTask {
 	}
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

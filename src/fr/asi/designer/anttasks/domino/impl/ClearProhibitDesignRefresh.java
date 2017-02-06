@@ -2,14 +2,14 @@ package fr.asi.designer.anttasks.domino.impl;
 
 import lotus.domino.Document;
 import lotus.domino.NotesException;
-import fr.asi.designer.anttasks.domino.BaseDesignElementTask;
+import fr.asi.designer.anttasks.domino.DesignElementTask;
 
 /**
  * Task to remove the "prohibit design refresh" flag
  * on design elements.
  * @author Lionel HERVIER
  */
-public class ClearProhibitDesignRefresh extends BaseDesignElementTask {
+public class ClearProhibitDesignRefresh extends DesignElementTask {
 
 	/**
 	 * Dry run ?
@@ -17,7 +17,7 @@ public class ClearProhibitDesignRefresh extends BaseDesignElementTask {
 	private boolean dryRun = false;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDesignElementTask#execute(fr.asi.designer.anttasks.domino.BaseDesignElementTask.Type, lotus.domino.Document)
+	 * @see fr.asi.designer.anttasks.domino.DesignElementTask#execute(fr.asi.designer.anttasks.domino.DesignElementTask.Type, lotus.domino.Document)
 	 */
 	@Override
 	protected void execute(Type type, Document designElement) throws NotesException {

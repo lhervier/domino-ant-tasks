@@ -24,7 +24,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * A task that runs inside a Notes Session
  * @author Lionel HERVIER
  */
-public abstract class BaseNotesElement<E> {
+public abstract class NotesElement<E> {
 
 	/**
 	 * The project
@@ -56,16 +56,16 @@ public abstract class BaseNotesElement<E> {
 		Thread t = new NotesThread() {
 			public void runNotes() {
 				try {
-					BaseNotesElement.this.session = NotesFactory.createSession(
+					NotesElement.this.session = NotesFactory.createSession(
 							(String) null, 
 							(String) null, 
-							(String) BaseNotesElement.this.password
+							(String) NotesElement.this.password
 					);
-					valueHolder.value = BaseNotesElement.this.run(BaseNotesElement.this.session);
+					valueHolder.value = NotesElement.this.run(NotesElement.this.session);
 				} catch(Throwable e) {
 					exHolder.value = e;
 				} finally {
-					Utils.recycleQuietly(BaseNotesElement.this.session);
+					Utils.recycleQuietly(NotesElement.this.session);
 				}
 			}
 		};

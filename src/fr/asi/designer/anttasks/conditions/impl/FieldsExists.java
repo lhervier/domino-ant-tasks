@@ -10,14 +10,14 @@ import lotus.domino.NotesException;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.conditions.BaseDatabaseSetCondition;
+import fr.asi.designer.anttasks.conditions.DatabaseSetCondition;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * A condition to check if a given document contains a given field
  * @author Lionel HERVIER
  */
-public class FieldsExists extends BaseDatabaseSetCondition {
+public class FieldsExists extends DatabaseSetCondition {
 
 	/**
 	 * The formula. Must select only one document.
@@ -30,7 +30,7 @@ public class FieldsExists extends BaseDatabaseSetCondition {
 	private String fields;
 
 	/**
-	 * @see fr.asi.designer.anttasks.conditions.BaseDatabaseSetCondition#eval(Database)
+	 * @see fr.asi.designer.anttasks.conditions.DatabaseSetCondition#eval(Database)
 	 */
 	@Override
 	protected boolean eval(List<Database> databases) throws NotesException {

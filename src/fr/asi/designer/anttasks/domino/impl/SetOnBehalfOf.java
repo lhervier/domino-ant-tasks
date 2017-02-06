@@ -4,14 +4,14 @@ import lotus.domino.Database;
 import lotus.domino.Document;
 import lotus.domino.NoteCollection;
 import lotus.domino.NotesException;
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * Ant task to declare that an agent must run on behalf of someone
  * @author Lionel HERVIER
  */
-public class SetOnBehalfOf extends BaseDatabaseSetTask {
+public class SetOnBehalfOf extends DatabaseSetTask {
 
 	/**
 	 * Agent
@@ -38,7 +38,7 @@ public class SetOnBehalfOf extends BaseDatabaseSetTask {
 	}
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
+	 * @see fr.asi.designer.anttasks.domino.DatabaseSetTask#execute(Database)
 	 */
 	@Override
 	public void execute(Database db) throws NotesException {

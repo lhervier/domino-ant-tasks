@@ -5,7 +5,7 @@ import java.util.List;
 import lotus.domino.Database;
 import lotus.domino.DocumentCollection;
 import lotus.domino.NotesException;
-import fr.asi.designer.anttasks.conditions.BaseDatabaseSetCondition;
+import fr.asi.designer.anttasks.conditions.DatabaseSetCondition;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -13,7 +13,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * a set of databases
  * @author Lionel HERVIER
  */
-public class DocumentExists extends BaseDatabaseSetCondition {
+public class DocumentExists extends DatabaseSetCondition {
 
 	/**
 	 * The formula
@@ -21,7 +21,7 @@ public class DocumentExists extends BaseDatabaseSetCondition {
 	private String formula;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.conditions.BaseDatabaseSetCondition#eval(java.util.List)
+	 * @see fr.asi.designer.anttasks.conditions.DatabaseSetCondition#eval(java.util.List)
 	 */
 	@Override
 	protected boolean eval(List<Database> databases) throws NotesException {

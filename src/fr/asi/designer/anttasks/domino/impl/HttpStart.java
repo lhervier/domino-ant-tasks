@@ -4,14 +4,14 @@ import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 
 
 /**
  * Starts an http task on a domino server
  * @author Lionel HERVIER
  */
-public class HttpStart extends BaseNotesTask {
+public class HttpStart extends NotesTask {
 
 	/**
 	 * The server

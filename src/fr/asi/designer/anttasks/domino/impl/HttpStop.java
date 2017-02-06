@@ -5,14 +5,14 @@ import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 
 
 /**
  * Ant task to stop an http task
  * @author Lionel HERVIER
  */
-public class HttpStop extends BaseNotesTask {
+public class HttpStop extends NotesTask {
 
 	/**
 	 * The server to send the command to
@@ -25,7 +25,7 @@ public class HttpStop extends BaseNotesTask {
 	private boolean failSafe;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

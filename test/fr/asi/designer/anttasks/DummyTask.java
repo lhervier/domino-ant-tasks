@@ -3,9 +3,9 @@ package fr.asi.designer.anttasks;
 import lotus.domino.Database;
 import lotus.domino.Document;
 import lotus.domino.NotesException;
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 
-public class DummyTask extends BaseDatabaseSetTask {
+public class DummyTask extends DatabaseSetTask {
 
 	private String form;
 	

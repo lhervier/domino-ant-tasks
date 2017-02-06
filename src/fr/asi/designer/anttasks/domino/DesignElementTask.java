@@ -13,7 +13,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * Base class for tasks that runs on design elements
  * @author Lionel HERVIER
  */
-public abstract class BaseDesignElementTask extends BaseDatabaseSetTask {
+public abstract class DesignElementTask extends DatabaseSetTask {
 
 	/**
 	 * Enumeration of all supported design elements
@@ -66,7 +66,7 @@ public abstract class BaseDesignElementTask extends BaseDatabaseSetTask {
 	protected abstract void execute(Type type, Document designElement) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.BaseDatabaseSetElement#execute(Database)
+	 * @see fr.asi.designer.anttasks.DatabaseSetElement#execute(Database)
 	 */
 	@Override
 	protected void execute(Database db) throws NotesException {
@@ -82,7 +82,7 @@ public abstract class BaseDesignElementTask extends BaseDatabaseSetTask {
 					for( Type tp : Type.values() ) {
 						if( Type.ALL.equals(tp) )
 							continue;
-						BaseDesignElementTask task = this.delegate(this.getClass());
+						DesignElementTask task = this.delegate(this.getClass());
 						task.setSelect(tp.name());
 						task.execute();
 					}

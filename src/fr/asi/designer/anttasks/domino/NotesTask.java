@@ -2,9 +2,9 @@ package fr.asi.designer.anttasks.domino;
 
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import fr.asi.designer.anttasks.BaseNotesElement;
+import fr.asi.designer.anttasks.NotesElement;
 
-public abstract class BaseNotesTask extends BaseNotesElement<Void> {
+public abstract class NotesTask extends NotesElement<Void> {
 
 	/**
 	 * Execution
@@ -13,7 +13,7 @@ public abstract class BaseNotesTask extends BaseNotesElement<Void> {
 	protected abstract void execute(Session session) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.BaseNotesElement#run(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.NotesElement#run(lotus.domino.Session)
 	 */
 	@Override
 	protected Void run(Session session) throws NotesException {

@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.DOMUtils;
 import fr.asi.designer.anttasks.util.Utils;
 
@@ -38,7 +38,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * Export a set of documents into a DXL file
  * @author Lionel HERVIER
  */
-public class DxlExport extends BaseNotesTask {
+public class DxlExport extends NotesTask {
 
 	/**
 	 * Un log succès
@@ -68,7 +68,7 @@ public class DxlExport extends BaseNotesTask {
 	private String toFile;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	protected void execute(Session session) throws NotesException {

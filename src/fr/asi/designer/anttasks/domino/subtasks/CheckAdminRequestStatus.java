@@ -5,7 +5,7 @@ import lotus.domino.Document;
 import lotus.domino.DocumentCollection;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
@@ -14,7 +14,7 @@ import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
  * Check the status of a given adminp request
  * @author Lionel HERVIER
  */
-public class CheckAdminRequestStatus extends BaseNotesTask {
+public class CheckAdminRequestStatus extends NotesTask {
 
 	/**
 	 * The server
@@ -32,7 +32,7 @@ public class CheckAdminRequestStatus extends BaseNotesTask {
 	private String status;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	protected void execute(Session session) throws NotesException {

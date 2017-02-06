@@ -2,7 +2,7 @@ package fr.asi.designer.anttasks.domino.impl;
 
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.domino.subtasks.CopyAllDocuments;
 import fr.asi.designer.anttasks.domino.subtasks.TemplateCheck;
 
@@ -10,7 +10,7 @@ import fr.asi.designer.anttasks.domino.subtasks.TemplateCheck;
  * Ant task to copy a domino database. This task delegates to multiple other tasks.
  * @author Lionel HERVIER
  */
-public class DatabaseCopy extends BaseNotesTask {
+public class DatabaseCopy extends NotesTask {
 
 	/**
 	 * The source server
@@ -39,7 +39,7 @@ public class DatabaseCopy extends BaseNotesTask {
 	private String templateCheck;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

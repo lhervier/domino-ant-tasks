@@ -4,7 +4,7 @@ import org.apache.tools.ant.BuildException;
 
 import lotus.domino.Document;
 import lotus.domino.NotesException;
-import fr.asi.designer.anttasks.domino.BaseDesignElementTask;
+import fr.asi.designer.anttasks.domino.DesignElementTask;
 
 /**
  * This task will scan XPages into a set of databases
@@ -12,7 +12,7 @@ import fr.asi.designer.anttasks.domino.BaseDesignElementTask;
  * FIXME: Implement a Condition instead of a task.
  * @author Lionel HERVIER
  */
-public class CheckXPagesCompiled extends BaseDesignElementTask {
+public class CheckXPagesCompiled extends DesignElementTask {
 
 	/**
 	 * Constructor
@@ -23,7 +23,7 @@ public class CheckXPagesCompiled extends BaseDesignElementTask {
 	}
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDesignElementTask#execute(fr.asi.designer.anttasks.domino.BaseDesignElementTask.Type, lotus.domino.Document)
+	 * @see fr.asi.designer.anttasks.domino.DesignElementTask#execute(fr.asi.designer.anttasks.domino.DesignElementTask.Type, lotus.domino.Document)
 	 */
 	@Override
 	protected void execute(Type type, Document designElement) throws NotesException {
@@ -34,7 +34,7 @@ public class CheckXPagesCompiled extends BaseDesignElementTask {
 	// ============================================================
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDesignElementTask#setSelect(java.lang.String)
+	 * @see fr.asi.designer.anttasks.domino.DesignElementTask#setSelect(java.lang.String)
 	 */
 	@Override
 	public void setSelect(String select) {

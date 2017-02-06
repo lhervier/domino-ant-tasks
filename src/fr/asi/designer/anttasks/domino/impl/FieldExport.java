@@ -36,7 +36,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -44,7 +44,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * into a dxl fiel
  * @author Lionel HERVIER
  */
-public class FieldExport extends BaseNotesTask {
+public class FieldExport extends NotesTask {
 
 	/**
 	 * Un log succès
@@ -79,7 +79,7 @@ public class FieldExport extends BaseNotesTask {
 	private String toFile;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	protected void execute(Session session) throws NotesException {

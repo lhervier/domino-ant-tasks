@@ -3,10 +3,10 @@ package fr.asi.designer.anttasks.domino.subtasks;
 import lotus.domino.AdministrationProcess;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
-public class SignDatabaseWithServerId extends BaseNotesTask {
+public class SignDatabaseWithServerId extends NotesTask {
 
 	/**
 	 * The server to find the database
@@ -24,7 +24,7 @@ public class SignDatabaseWithServerId extends BaseNotesTask {
 	private String noteId;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

@@ -11,14 +11,14 @@ import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * Ant task to create a new database.
  * @author Lionel HERVIER
  */
-public class DatabaseCreate extends BaseNotesTask {
+public class DatabaseCreate extends NotesTask {
 
 	/**
 	 * Server where to create the database
@@ -31,7 +31,7 @@ public class DatabaseCreate extends BaseNotesTask {
 	private String database;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

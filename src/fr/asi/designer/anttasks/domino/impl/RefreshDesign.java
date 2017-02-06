@@ -2,7 +2,7 @@ package fr.asi.designer.anttasks.domino.impl;
 
 import lotus.domino.Database;
 import lotus.domino.NotesException;
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 
 /**
  * Ant task to launch a refresh design of a set of databases.
@@ -11,7 +11,7 @@ import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
  * with parameters.
  * @author Lionel HERVIER
  */
-public class RefreshDesign extends BaseDatabaseSetTask {
+public class RefreshDesign extends DatabaseSetTask {
 
 	/**
 	 * Dry run ?
@@ -26,7 +26,7 @@ public class RefreshDesign extends BaseDatabaseSetTask {
 	}
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Database)
+	 * @see fr.asi.designer.anttasks.domino.DatabaseSetTask#execute(lotus.domino.Database)
 	 */
 	@Override
 	public void execute(Database db) throws NotesException {

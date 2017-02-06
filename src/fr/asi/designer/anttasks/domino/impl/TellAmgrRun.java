@@ -2,13 +2,13 @@ package fr.asi.designer.anttasks.domino.impl;
 
 import lotus.domino.Database;
 import lotus.domino.NotesException;
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 
 /**
  * Task to send a "tell amgr run" on the server console
  * @author Lionel HERVIER
  */
-public class TellAmgrRun extends BaseDatabaseSetTask {
+public class TellAmgrRun extends DatabaseSetTask {
 
 	/**
 	 * The name of the agent
@@ -16,7 +16,7 @@ public class TellAmgrRun extends BaseDatabaseSetTask {
 	private String agent;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Database)
+	 * @see fr.asi.designer.anttasks.domino.DatabaseSetTask#execute(lotus.domino.Database)
 	 */
 	@Override
 	protected void execute(Database db) throws NotesException {

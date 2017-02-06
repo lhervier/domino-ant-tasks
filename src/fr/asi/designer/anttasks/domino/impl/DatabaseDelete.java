@@ -3,7 +3,7 @@ package fr.asi.designer.anttasks.domino.impl;
 import lotus.domino.Database;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -11,7 +11,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * FIXME: Implement support for DatabaseSets
  * @author Lionel HERVIER
  */
-public class DatabaseDelete extends BaseNotesTask {
+public class DatabaseDelete extends NotesTask {
 
 	/**
 	 * Server where to find the database
@@ -24,7 +24,7 @@ public class DatabaseDelete extends BaseNotesTask {
 	private String database;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

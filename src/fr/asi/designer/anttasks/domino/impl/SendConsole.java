@@ -11,7 +11,7 @@ import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -19,7 +19,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * 
  * @author Lionel HERVIER & Philippe ARDIT
  */
-public class SendConsole extends BaseNotesTask {
+public class SendConsole extends NotesTask {
 
 	/**
 	 * The server
@@ -47,7 +47,7 @@ public class SendConsole extends BaseNotesTask {
 	private int timeout = 200 * 1000;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

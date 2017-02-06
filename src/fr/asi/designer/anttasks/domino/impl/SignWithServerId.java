@@ -5,7 +5,7 @@ import lotus.domino.NotesException;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 import fr.asi.designer.anttasks.domino.subtasks.CheckAdminRequestStatus;
 import fr.asi.designer.anttasks.domino.subtasks.SignDatabaseWithServerId;
 
@@ -13,10 +13,10 @@ import fr.asi.designer.anttasks.domino.subtasks.SignDatabaseWithServerId;
  * Task to sign a given database with the server id
  * @author Lionel HERVIER
  */
-public class SignWithServerId extends BaseDatabaseSetTask {
+public class SignWithServerId extends DatabaseSetTask {
 
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(lotus.domino.Database)
+	 * @see fr.asi.designer.anttasks.domino.DatabaseSetTask#execute(lotus.domino.Database)
 	 */
 	@Override
 	public void execute(Database db) throws NotesException {

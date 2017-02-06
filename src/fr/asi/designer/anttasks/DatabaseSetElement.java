@@ -14,7 +14,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * Base task for tasks that work with databaseSets
  * @author Lionel HERVIER
  */
-public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
+public abstract class DatabaseSetElement<T> extends NotesElement<T> {
 	
 	/**
 	 * The server
@@ -66,7 +66,7 @@ public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
 	protected abstract T run(List<Database> databases) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.BaseNotesElement#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.NotesElement#execute(lotus.domino.Session)
 	 */
 	@Override
 	public T run(Session session) throws NotesException {

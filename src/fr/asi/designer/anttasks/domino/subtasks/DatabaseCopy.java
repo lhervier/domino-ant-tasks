@@ -5,7 +5,7 @@ import org.apache.tools.ant.BuildException;
 import lotus.domino.Database;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
@@ -19,7 +19,7 @@ import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
  *   will NOT be flagged as a template
  * @author Lionel HERVIER
  */
-public class DatabaseCopy extends BaseNotesTask {
+public class DatabaseCopy extends NotesTask {
 
 	/**
 	 * The source server
@@ -42,7 +42,7 @@ public class DatabaseCopy extends BaseNotesTask {
 	private String destDatabase;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {

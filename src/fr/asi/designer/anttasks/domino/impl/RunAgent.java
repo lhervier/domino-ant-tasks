@@ -10,7 +10,7 @@ import lotus.domino.NotesException;
 
 import org.apache.tools.ant.BuildException;
 
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 import fr.asi.designer.anttasks.domino.ContextDocField;
 import fr.asi.designer.anttasks.util.Utils;
 
@@ -20,7 +20,7 @@ import fr.asi.designer.anttasks.util.Utils;
  * document context.
  * @author Lionel HERVIER
  */
-public class RunAgent extends BaseDatabaseSetTask {
+public class RunAgent extends DatabaseSetTask {
 
 	/**
 	 * Agent
@@ -47,7 +47,7 @@ public class RunAgent extends BaseDatabaseSetTask {
 	}
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
+	 * @see fr.asi.designer.anttasks.domino.DatabaseSetTask#execute(Database)
 	 */
 	@Override
 	public void execute(Database db) throws NotesException {

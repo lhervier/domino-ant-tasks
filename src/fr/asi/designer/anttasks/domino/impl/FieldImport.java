@@ -39,14 +39,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
+import fr.asi.designer.anttasks.domino.DatabaseSetTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
  * Import fields into a set of documents
  * @author Lionel HERVIER
  */
-public class FieldImport extends BaseDatabaseSetTask {
+public class FieldImport extends DatabaseSetTask {
 
 	/**
 	 * Success log message
@@ -66,7 +66,7 @@ public class FieldImport extends BaseDatabaseSetTask {
 	private String fromFile;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
+	 * @see fr.asi.designer.anttasks.domino.DatabaseSetTask#execute(Database)
 	 */
 	@Override
 	protected void execute(Database db) throws NotesException {

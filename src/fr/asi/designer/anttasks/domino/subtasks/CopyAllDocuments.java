@@ -5,7 +5,7 @@ import lotus.domino.Document;
 import lotus.domino.DocumentCollection;
 import lotus.domino.NotesException;
 import lotus.domino.Session;
-import fr.asi.designer.anttasks.domino.BaseNotesTask;
+import fr.asi.designer.anttasks.domino.NotesTask;
 import fr.asi.designer.anttasks.util.Utils;
 
 import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
@@ -14,7 +14,7 @@ import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
  * Copy all documents from a source database to a destination
  * @author Lionel HERVIER
  */
-public class CopyAllDocuments extends BaseNotesTask {
+public class CopyAllDocuments extends NotesTask {
 
 	/**
 	 * The source server
@@ -37,7 +37,7 @@ public class CopyAllDocuments extends BaseNotesTask {
 	private String destDatabase;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseNotesTask#execute(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.domino.NotesTask#execute(lotus.domino.Session)
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {
