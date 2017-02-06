@@ -27,7 +27,7 @@ public class DatabaseSet extends ConditionBase {
 	/**
 	 * the parent task
 	 */
-	private DatabaseSetElement parentDatabaseSetElement;
+	private BaseDatabaseSetElement<?> parentDatabaseSetElement;
 	
 	/**
 	 * A Server name
@@ -177,7 +177,7 @@ public class DatabaseSet extends ConditionBase {
 	/**
 	 * @param parentElement the parentElement to set
 	 */
-	public void setParentDatabaseSetElement(DatabaseSetElement parentElement) {
+	public void setParentDatabaseSetElement(BaseDatabaseSetElement<?> parentElement) {
 		this.parentDatabaseSetElement = parentElement;
 	}
 

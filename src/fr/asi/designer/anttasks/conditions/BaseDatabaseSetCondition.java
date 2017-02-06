@@ -1,55 +1,21 @@
 package fr.asi.designer.anttasks.conditions;
 
-import static fr.asi.designer.anttasks.util.DominoUtils.openDatabase;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import lotus.domino.Database;
 import lotus.domino.NotesException;
-import lotus.domino.Session;
-import fr.asi.designer.anttasks.DatabaseSet;
-import fr.asi.designer.anttasks.DatabaseSetElement;
-import fr.asi.designer.anttasks.util.Utils;
+
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.taskdefs.condition.Condition;
+
+import fr.asi.designer.anttasks.BaseDatabaseSetElement;
 
 /**
  * Base Notes condition that rely on a server and a database
  * @author Lionel HERVIER
  */
-public abstract class BaseDatabaseSetCondition extends BaseNotesCondition implements DatabaseSetElement {
+public abstract class BaseDatabaseSetCondition extends BaseDatabaseSetElement<Boolean> implements Condition {
 
-	/**
-	 * The server
-	 */
-	private String server;
-	
-	/**
-	 * The database
-	 */
-	private String database;
-
-	/**
-	 * The database set
-	 */
-	private List<DatabaseSet> databases = new ArrayList<DatabaseSet>();
-	
-	/**
-	 * Create an empty databaseSet
-	 */
-	public DatabaseSet createDatabaseSet() {
-		DatabaseSet ret = new DatabaseSet();
-		ret.setParentDatabaseSetElement(this);
-		this.databases.add(ret);
-		return ret;
-	}
-	
-	/**
-	 * Clear the database set
-	 */
-	public void clearDatabaseSet() {
-		this.databases.clear();
-	}
-	
 	/**
 	 * Evaluate the condition on the database
 	 * @param databases the databases
@@ -59,53 +25,17 @@ public abstract class BaseDatabaseSetCondition extends BaseNotesCondition implem
 	protected abstract boolean eval(List<Database> databases) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.conditions.BaseNotesCondition#eval(lotus.domino.Session)
+	 * @see fr.asi.designer.anttasks.BaseDatabaseSetElement#execute(java.util.List)
 	 */
 	@Override
-	protected boolean eval(Session session) throws NotesException {
-		// Extract databases file path
-		List<Database> dbs = new ArrayList<Database>();
-		try {
-			if( !Utils.isEmpty(this.database) && !Utils.isEmpty(this.server) )
-				dbs.add(openDatabase(this.getSession(), this.server, this.database));
-			for( DatabaseSet s : this.databases )
-				dbs.addAll(s.getDatabases());
-			
-			// Run execution on each database
-			return this.eval(dbs);
-		} finally {
-			for( Database db : dbs )
-				Utils.recycleQuietly(db);
-		}
+	protected Boolean execute(List<Database> databases) throws NotesException {
+		return new Boolean(this.eval(databases));
 	}
 
 	/**
-	 * @return the server
+	 * @see org.apache.tools.ant.taskdefs.condition.Condition#eval()
 	 */
-	public String getServer() {
-		return server;
-	}
-
-	/**
-	 * @return the database
-	 */
-	protected String getDatabase() {
-		return database;
-	}
-
-	// =======================================================================
-	
-	/**
-	 * @param server the server to set
-	 */
-	public void setServer(String server) {
-		this.server = server;
-	}
-
-	/**
-	 * @param database the database to set
-	 */
-	public void setDatabase(String database) {
-		this.database = database;
+	public boolean eval() throws BuildException {
+		return this.run().booleanValue();
 	}
 }

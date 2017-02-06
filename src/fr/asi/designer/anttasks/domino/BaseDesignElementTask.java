@@ -66,7 +66,7 @@ public abstract class BaseDesignElementTask extends BaseDatabaseSetTask {
 	protected abstract void execute(Type type, Document designElement) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.domino.BaseDatabaseSetTask#execute(Database)
+	 * @see fr.asi.designer.anttasks.BaseDatabaseSetElement#execute(Database)
 	 */
 	@Override
 	protected void execute(Database db) throws NotesException {
