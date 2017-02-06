@@ -25,10 +25,10 @@ public abstract class BaseDatabaseSetCondition extends BaseDatabaseSetElement<Bo
 	protected abstract boolean eval(List<Database> databases) throws NotesException;
 	
 	/**
-	 * @see fr.asi.designer.anttasks.BaseDatabaseSetElement#execute(java.util.List)
+	 * @see fr.asi.designer.anttasks.BaseDatabaseSetElement#run(java.util.List)
 	 */
 	@Override
-	protected Boolean execute(List<Database> databases) throws NotesException {
+	protected Boolean run(List<Database> databases) throws NotesException {
 		return new Boolean(this.eval(databases));
 	}
 

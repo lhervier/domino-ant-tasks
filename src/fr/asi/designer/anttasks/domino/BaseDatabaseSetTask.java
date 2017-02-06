@@ -23,7 +23,7 @@ public abstract class BaseDatabaseSetTask extends BaseDatabaseSetElement<Void> {
 	 * @see fr.asi.designer.anttasks.BaseDatabaseSetElement#execute(java.util.List)
 	 */
 	@Override
-	protected Void execute(List<Database> databases) throws NotesException {
+	protected Void run(List<Database> databases) throws NotesException {
 		for( Database db : databases )
 			this.execute(db);
 		return null;

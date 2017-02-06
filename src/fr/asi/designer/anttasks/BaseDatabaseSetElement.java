@@ -63,7 +63,7 @@ public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
 	 * @param databases the Notes databases to run the task on
 	 * @throws NotesException
 	 */
-	protected abstract T execute(List<Database> databases) throws NotesException;
+	protected abstract T run(List<Database> databases) throws NotesException;
 	
 	/**
 	 * @see fr.asi.designer.anttasks.BaseNotesElement#execute(lotus.domino.Session)
@@ -79,7 +79,7 @@ public abstract class BaseDatabaseSetElement<T> extends BaseNotesElement<T> {
 				dbs.addAll(s.getDatabases());
 			
 			// Run execution on each database
-			return this.execute(dbs);
+			return this.run(dbs);
 		} finally {
 			for( Database db : dbs )
 				Utils.recycleQuietly(db);
