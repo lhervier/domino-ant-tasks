@@ -15,6 +15,7 @@ import lotus.domino.NotesThread;
 import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 
 import fr.asi.designer.anttasks.util.ObjectHolder;
@@ -26,6 +27,11 @@ import fr.asi.designer.anttasks.util.Utils;
  */
 public abstract class BaseNotesTask extends Task {
 
+	/**
+	 * The project
+	 */
+	private Project project;
+	
 	/**
 	 * Password of the local id file
 	 */
@@ -157,6 +163,16 @@ public abstract class BaseNotesTask extends Task {
 	}
 	
 	/**
+	 * Log a message
+	 */
+	public void log(String message) {
+		if( this.project == null )
+			System.out.println(message);
+		else
+			this.project.log(message, Project.MSG_INFO);
+	}
+	
+	/**
 	 * @return the password
 	 */
 	public String getPassword() {
@@ -177,5 +193,19 @@ public abstract class BaseNotesTask extends Task {
 	 */
 	public Session getSession() {
 		return session;
+	}
+
+	/**
+	 * @param project the project to set
+	 */
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	/**
+	 * @return the project
+	 */
+	public Project getProject() {
+		return project;
 	}
 }

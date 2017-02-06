@@ -4,7 +4,6 @@ import lotus.domino.Database;
 import lotus.domino.NotesException;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
 import fr.asi.designer.anttasks.domino.subtasks.CheckAdminRequestStatus;
@@ -42,7 +41,7 @@ public class SignWithServerId extends BaseDatabaseSetTask {
 		String status = null;
 		while( !"Processed".equals(status) && tick < maxTimeout ) {
 			if( tick % 5 == 0 )
-				this.log("Waiting for adminp requests to finish", Project.MSG_INFO);
+				this.log("Waiting for adminp requests to finish");
 			tick++;
 			
 			CheckAdminRequestStatus task = this.delegate(CheckAdminRequestStatus.class);

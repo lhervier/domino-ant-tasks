@@ -3,7 +3,6 @@ package fr.asi.designer.anttasks.domino.impl;
 import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 
@@ -39,7 +38,7 @@ public class HttpStart extends BaseNotesTask {
 	}
 
 	public void execute(Session session) {
-		this.log("Starting HTTP Task on server '" + this.server + "'", Project.MSG_INFO);
+		this.log("Starting HTTP Task on server '" + this.server + "'");
 		SendConsole task = this.delegate(SendConsole.class);
 		task.setServer(this.server);
 		task.setCommand("load http");

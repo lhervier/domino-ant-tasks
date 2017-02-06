@@ -10,7 +10,6 @@ import lotus.domino.NotesException;
 import lotus.domino.Session;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 import fr.asi.designer.anttasks.domino.BaseNotesTask;
 import fr.asi.designer.anttasks.util.Utils;
@@ -52,7 +51,7 @@ public class SendConsole extends BaseNotesTask {
 	 */
 	@Override
 	public void execute(Session session) throws NotesException {
-		this.log("Sending command '" + this.command + "' to server '" + this.server + "'", Project.MSG_INFO);
+		this.log("Sending command '" + this.command + "' to server '" + this.server + "'");
 		String taskMsg = session.sendConsoleCommand(
 				this.server, 
 				this.command
@@ -60,7 +59,7 @@ public class SendConsole extends BaseNotesTask {
 		this.log(taskMsg);
 		
 		if( Utils.isEmpty(this.taskRunningMessage) && Utils.isEmpty(this.taskStartedMessage) ) {
-			this.log("Command launched... please check manually", Project.MSG_INFO);
+			this.log("Command launched... please check manually");
 			return;
 		}
 		
@@ -75,7 +74,7 @@ public class SendConsole extends BaseNotesTask {
 			int tick = 0;
 			while( (running || !started) && System.currentTimeMillis() < end ) {
 				if( tick % 5 == 0 )
-					this.log("Waiting for task to start/finish", Project.MSG_INFO);
+					this.log("Waiting for task to start/finish");
 				tick++;
 				
 				Thread.sleep(1000);
@@ -122,7 +121,7 @@ public class SendConsole extends BaseNotesTask {
 		} catch (InterruptedException e) {
 			throw new BuildException(e);
 		}
-		this.log("Task finished/started", Project.MSG_INFO);
+		this.log("Task finished/started");
 	}
 	
 	// ==============================================================================

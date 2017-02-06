@@ -2,9 +2,6 @@ package fr.asi.designer.anttasks.domino.impl;
 
 import lotus.domino.Database;
 import lotus.domino.NotesException;
-
-import org.apache.tools.ant.Project;
-
 import fr.asi.designer.anttasks.domino.BaseDatabaseSetTask;
 
 /**
@@ -33,7 +30,7 @@ public class RefreshDesign extends BaseDatabaseSetTask {
 	 */
 	@Override
 	public void execute(Database db) throws NotesException {
-		this.log("Refreshing design of '" + db.getServer() + "!!" + db.getFilePath() + "'", Project.MSG_INFO);
+		this.log("Refreshing design of '" + db.getServer() + "!!" + db.getFilePath() + "'");
 		String cmd = "load design -f " + db.getFilePath();
 		
 		if( this.dryRun )
