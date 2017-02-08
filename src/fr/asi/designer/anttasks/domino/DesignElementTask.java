@@ -77,21 +77,13 @@ public abstract class DesignElementTask extends DatabaseSetTask {
 			String[] selects = this.select.split(",");
 			for( String select : selects ) {
 				// Selecting all design elements => Delegates to sub tasks
-				Type t = Type.valueOf(select);
-				if( Type.ALL.equals(t) ) {
-					for( Type tp : Type.values() ) {
-						if( Type.ALL.equals(tp) )
-							continue;
-						DesignElementTask task = this.delegate(this.getClass());
-						task.setSelect(tp.name());
-						task.execute();
-					}
-					return;
-				}
 				
 				// Build collection
 				// See https://www-10.lotus.com/ldd/ddwiki.nsf/dx/ls-design-programming.htm (version 1 !!!!!)
-				if( Type.ACTIONS.equals(t) ) {
+				Type t = Type.valueOf(select);
+				if( Type.ALL.equals(t) ) {
+					nc.selectAllDesignElements(true);
+				} else if( Type.ACTIONS.equals(t) ) {
 					nc.setSelectActions(true);
 				} else if( Type.AGENTS.equals(t) ) {
 					nc.setSelectAgents(true);
