@@ -72,6 +72,50 @@ public abstract class BaseAntTest extends TestCase {
 	}
 	
 	/**
+	 * Extract a file from the classpth into a temp file
+	 * @param path path to the file in the classpath (relative to base package)
+	 * @return the temp file
+	 * @throws IOException
+	 */
+	public File extractToTemp(String path) throws IOException {
+		File ret;
+		
+		// Find file name
+		String name;
+		int pos = path.lastIndexOf('/');
+		if( pos == -1 )
+			name = path;
+		else
+			name = path.substring(pos + 1);
+		
+		// Create temp file
+		pos = name.lastIndexOf('.');
+		if( pos == -1 )
+			ret = File.createTempFile(name, ".tmp");
+		else
+			ret = File.createTempFile(name.substring(0, pos), "." + name.substring(pos + 1));
+		
+		// Extract to temp folder
+		InputStream in = null;
+		OutputStream out = null;
+		try {
+			in = Thread.currentThread().getContextClassLoader().getResourceAsStream("fr/asi/designer/anttasks/" + path);
+			out = new FileOutputStream(ret);
+			byte[] buffer = new byte[4 * 1024];
+			int read = in.read(buffer);
+			while( read != -1 ) {
+				out.write(buffer, 0, read);
+				read = in.read(buffer);
+			}
+		} finally {
+			Utils.closeQuietly(in);
+			Utils.closeQuietly(out);
+		}
+		
+		return ret;
+	}
+	
+	/**
 	 * Launch an ant task on a given build file
 	 * @param buildXml path (in the classpath) to the build.xml
 	 * @param target a specific target to execute
@@ -81,24 +125,9 @@ public abstract class BaseAntTest extends TestCase {
 	public List<String> runAntTask(
 			String buildXml, 
 			String target) throws IOException {
-		File f = File.createTempFile("build", ".xml");
+		File f = null;
 		try {
-			// Copy the build.xml from resource to the file system.
-			InputStream in = null;
-			OutputStream out = null;
-			try {
-				in = Thread.currentThread().getContextClassLoader().getResourceAsStream("fr/asi/designer/anttasks/" + buildXml);
-				out = new FileOutputStream(f);
-				byte[] buffer = new byte[4 * 1024];
-				int read = in.read(buffer);
-				while( read != -1 ) {
-					out.write(buffer, 0, read);
-					read = in.read(buffer);
-				}
-			} finally {
-				Utils.closeQuietly(in);
-				Utils.closeQuietly(out);
-			}
+			f = this.extractToTemp(buildXml);
 			
 			// Prepare logging
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -151,7 +180,7 @@ public abstract class BaseAntTest extends TestCase {
 			
 			return ret;
 		} finally {
-			if( !f.delete() )
+			if( f != null && !f.delete() )
 				throw new RuntimeException("Unable to remove file " + f.getAbsolutePath());
 		}
 	}

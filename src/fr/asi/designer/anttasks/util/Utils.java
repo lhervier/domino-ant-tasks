@@ -1,6 +1,7 @@
 package fr.asi.designer.anttasks.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +30,29 @@ public class Utils {
 		if( s.length() == 0 )
 			return true;
 		return false;
+	}
+	
+	/**
+	 * Read the content of a file
+	 * @param f the file to read
+	 * @return the file content
+	 * @throws IOException
+	 */
+	public static final byte[] readFile(File f) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		InputStream in = null;
+		try {
+			in = new FileInputStream(f);
+			byte[] buffer = new byte[4 * 1024];
+			int read = in.read(buffer);
+			while( read != -1 ) {
+				out.write(buffer, 0, read);
+				read = in.read(buffer);
+			}
+		} finally {
+			closeQuietly(in);
+		}
+		return out.toByteArray();
 	}
 	
 	/**

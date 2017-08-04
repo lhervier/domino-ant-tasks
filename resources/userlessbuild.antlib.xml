@@ -7,6 +7,7 @@
 	<taskdef name="setUpdateSiteVersion" classname="fr.asi.designer.anttasks.userlessbuild.SetUpdateSiteVersion"/>
 	<taskdef name="setOnDiskTitle" classname="fr.asi.designer.anttasks.userlessbuild.SetOnDiskTitle"/>
 	<taskdef name="setOnDiskTemplate" classname="fr.asi.designer.anttasks.userlessbuild.SetOnDiskTemplate"/>
+	<taskdef name="updateJavaLibArchive" classname="fr.asi.designer.anttasks.userlessbuild.UpdateJavaLibArchive"/>
 
 	<!--  Domino ant tasks -->
 	<taskdef name="httpStop" classname="fr.asi.designer.anttasks.domino.impl.HttpStop"/>

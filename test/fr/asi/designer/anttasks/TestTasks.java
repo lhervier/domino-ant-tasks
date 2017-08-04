@@ -368,4 +368,19 @@ public class TestTasks extends BaseAntTest {
 			}
 		});
 	}
+	
+	/**
+	 * Test the updateJavaLibArchive task
+	 */
+	public void testUpdateJavaLibArchive() throws Exception {
+		File javalib = this.extractToTemp("tasks/testjavalib.javalib");
+		javalib.deleteOnExit();
+		File jar = this.extractToTemp("tasks/test.jar");
+		jar.deleteOnExit();
+		
+		this.setProperty("javaLibPath", javalib.getName());
+		this.setProperty("jarFilePath", jar.getName());
+		
+		this.runAntTask("tasks/TestUpdateJavaLibArchive.xml");
+	}
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="test-updateJavaLibArchive" basedir="." default="test">
+	<taskdef resource="userlessbuild.antlib.xml"/>
+	<target name="test">
+		<updateJavaLibArchive javaLibPath="${javaLibPath}" jarFilePath="${jarFilePath}" jarName="test.jar"/>
+	</target>
+</project>

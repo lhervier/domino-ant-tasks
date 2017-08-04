@@ -111,6 +111,13 @@ This task will change the name of the template that a given database is declarin
 
 	<setOnDiskTemplate onDiskPath="${basedir}/mydatabase-ondisk" masterTemplateName="mytmpl"/>
 
+### updateJavaLibArchive ###
+
+This task will a update a jar file referenced inside a java library. It will update the .javalib file with a base64 encoded version of the jar.
+When Domino Designer will synchronize the ondisk project, the Java Library will be updated with the new version of the jar.
+
+	<updateJavaLibArchive javaLibPath="db-ondisk/Code/ScriptLibraries/my.javalib" jarFilePath="dist/my.jar" jarName="my.jar"/>
+
 ## Tasks to manipulate data on Domino Servers ##
 
 These tasks are using the standard notes apis. They will open sessions to the Domino server using the local Notes client. For this, you will have to give them the password of the local ID file.

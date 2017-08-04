@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="userlessbuild-ant-tasks" basedir="." default="build">
-	<property name="notes.home" value="D:/IBM/Notes"/>
-	<property name="ant.home" value="D:/ant/"/>
+<project name="domino-ant-tasks" basedir="." default="build">
+	<property name="version" value="1.1.b4"/>
+	
+	<property name="ant.home" value="C:\ant\"/>
+	
 	<property name="src.dir" value="src"/>
-    <property name="classes.dir" value="bin"/>
-	<property name="resources.dir" value="resources"/>
+    <property name="resources.dir" value="resources"/>
+	<property name="classes.dir" value="bin"/>
 	<property name="build.dir" value="build"/>
-	<property name="version" value="1.1.b3"/>
+	<property name="lib.dir" value="lib"/>
 	
     <target name="clean" description="Delete all generated files">
         <delete dir="${classes.dir}"/>
@@ -14,21 +16,28 @@
     </target>
    	
 	<target name="compile" description="Generating java classes">
-		<condition property="notes.jar.exists">
+		<condition property="from.notes.jvm">
+			<equals arg1="${java.vm.name}" arg2="IBM J9 VM"/>
+		</condition>
+		<fail unless="from.notes.jvm" message="You must use your local Notes client JVM to execute this build file (using the JAVA_HOME environment variable)."/>
+		
+		<condition property="ant.exists">
 			<resourceexists>
-				<file file="${notes.home}/jvm/lib/ext/Notes.jar"/>
+				<file file="${ant.home}/lib/ant.jar"/>
 			</resourceexists>
 		</condition>
-		<fail unless="notes.jar.exists" message="The notes.home property must point to the root of your local IBM Notes folder"/>
+		<fail unless="ant.exists" message="The ant.home property must point to the root of your local ANT folder"/>
+		
 		<mkdir dir="${classes.dir}"/>
 		<javac
 				srcdir="${src.dir}"
 				destdir="${classes.dir}"
+				target="1.6"
+				source="1.6"
 				debug="on">
 			<classpath>
-				<fileset dir="lib" includes="*.jar"/>
-				<fileset dir="${ant.home}/lib/" includes="*.jar"/>
-				<fileset file="${notes.home}/jvm/lib/ext/Notes.jar"/>
+				<fileset dir="${lib.dir}" includes="*.jar"/>
+				<fileset dir="${ant.home}/lib" includes="*.jar"/>
 			</classpath>
 		</javac>
 	</target>
@@ -41,5 +50,12 @@
     	</jar>
     </target>
 	
-	<target name="build" depends="clean,compile,jar"/>
+	<target name="merge" description="Merge the dependencies jars" depends="jar">
+		<zip destfile="${build.dir}/${ant.project.name}-dist-${version}.jar">
+			<zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
+			<zipgroupfileset file="${build.dir}/${ant.project.name}-${version}.jar"/>
+		</zip>
+	</target>
+	
+	<target name="build" depends="clean,compile,jar,merge"/>
 </project>

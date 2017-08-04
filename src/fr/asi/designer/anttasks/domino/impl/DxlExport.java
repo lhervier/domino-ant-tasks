@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import fr.asi.designer.anttasks.domino.NotesTask;
-import fr.asi.designer.anttasks.util.DOMUtils;
+import fr.asi.designer.anttasks.util.XmlUtils;
 import fr.asi.designer.anttasks.util.Utils;
 
 /**
@@ -151,14 +151,14 @@ public class DxlExport extends NotesTask {
 	 */
 	private void clean(Element rootElt) {
 		// Clean database tag
-		DOMUtils.removeAttributes(rootElt, "replicaid", "version", "path", "maintenanceversion");
-		DOMUtils.removeChild(rootElt, "databaseinfo", "fulltextsettings", "launchsettings");
+		XmlUtils.removeAttributes(rootElt, "replicaid", "version", "path", "maintenanceversion");
+		XmlUtils.removeChild(rootElt, "databaseinfo", "fulltextsettings", "launchsettings");
 		
 		// Clean documents
 		NodeList docLst = rootElt.getElementsByTagName("document");
 		for( int i=0; i<docLst.getLength(); i++ ) {
 			Element doc = (Element) docLst.item(i);
-			DOMUtils.removeChild(doc, "noteinfo", "updatedby", "revisions");
+			XmlUtils.removeChild(doc, "noteinfo", "updatedby", "revisions");
 		}
 	}
 	
